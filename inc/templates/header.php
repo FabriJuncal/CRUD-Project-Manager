@@ -18,4 +18,5 @@
     <link rel="stylesheet" href="css/sweetalert2.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
+<!-- Con la funcion PHP determinamos en que pagina estamos y le asignamos la CLASE -->
 <body class="<?php echo obtenerPaginaActual() ?>">
