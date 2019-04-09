@@ -68,9 +68,8 @@
     </main>
 </div><!--.contenedor-->
 
+<?php
+  // Librerias creadas
+  include 'inc/templates/footer.php';
 
-<script src="js/sweetalert2.all.min.js"></script>
-
-
-</body>
-</html>
+?>
