@@ -20,7 +20,7 @@ if($accion = 'crear'){
     include '../funciones/conexion.php';
 
     try{
-        // Realizamos la consulta a la base de datos
+        // Realizamos la consulta a la base de datos con PREPARE STATEMENT
         $stmt = $conn->prepare("INSERT INTO usuarios (usuario, password) VALUES (?,?)");
         $stmt->bind_param('ss', $usuario, $hash_password);
         $stmt->execute();
@@ -30,6 +30,7 @@ if($accion = 'crear'){
         //     'error' => $stmt->error              }      =>  AL REALIZAR UNA CONSULTA A LA BASE DE DATOS
         // );
 
+        // Condicional en el caso que alguna fila halla sido afectada por la consulta
         if($stmt->affected_rows){
             $respuesta = array(
                 'respuesta' => 'correcto',
@@ -39,7 +40,7 @@ if($accion = 'crear'){
         }
 
 
-
+        // Cerramos las conexiones
         $stmt->close();
         $conn->close();
 
