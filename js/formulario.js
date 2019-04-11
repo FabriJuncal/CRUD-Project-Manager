@@ -46,7 +46,7 @@ function validarRegistro(e) {
             if(this.status === 200){
                 var respuesta = JSON.parse(xhr.responseText);
 
-                
+                console.log(respuesta);
                 if(respuesta.respuesta === 'correcto'){ // Si la respuesta es correcta
                     
                     // Si es un nuevo usuario

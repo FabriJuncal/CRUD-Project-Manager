@@ -4,7 +4,7 @@ $accion = $_POST['accion'];
 $password = $_POST['password'];
 $usuario = $_POST['usuario'];
 
-if($accion = 'crear'){
+if($accion === 'crear'){
     //Codigo para crear  los Administradores
 
     //Hasheamos los password
@@ -58,8 +58,48 @@ if($accion = 'crear'){
         );
     }
 
-    echo json_encode($respuesta);
 
-}else if($accion = 'login'){
+
+}else if($accion === 'login'){
     //Codigo para logear a los Admnistradores
+
+       //Importamos la conexion
+       include '../funciones/conexion.php';
+
+       try{
+
+        $stmt = $conn->prepare("SELECT id, usuario, password FROM usuarios WHERE usuario = ?");
+        $stmt->bind_param('s', $usuario);
+        $stmt->execute();
+
+        //Logeamos al Usuario
+        $stmt->bind_result($id_usuario, $nombre_usuario, $pass_usuario);
+        $stmt->fetch();
+
+        if($nombre_usuario){
+            $respuesta = array(
+                'respuesta' => 'correcto',
+                'id' => $id_usuario,
+                'nombre' => $nombre_usuario,
+                'password' => $pass_usuario,
+                'tipo' => $accion
+            );
+        }else{
+            $respuesta = array(
+                'error' => 'Usuario no existe'
+            );
+        }
+        
+
+
+        $stmt->close();
+        $conn->close();
+       }catch(Exception $e){
+        // En caso de error , tomar la excepcion
+        $respuesta = array(
+            'error' => $e->getMessage()
+        );
+    }
 }
+
+echo json_encode($respuesta);
