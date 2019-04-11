@@ -76,14 +76,28 @@ if($accion === 'crear'){
         $stmt->bind_result($id_usuario, $nombre_usuario, $pass_usuario);
         $stmt->fetch();
 
+        // Verificamos si el Nombre de Usuario existe
         if($nombre_usuario){
-            $respuesta = array(
-                'respuesta' => 'correcto',
-                'id' => $id_usuario,
-                'nombre' => $nombre_usuario,
-                'password' => $pass_usuario,
-                'tipo' => $accion
-            );
+
+            // Verificamos que la Contraseña sea correcta
+
+            // password_verify: Recibe dos parametros, la contraseña que el usuario ingreso y la contraseña hasheada que obtenemos de la base de datos.
+
+            if(password_verify($password,$pass_usuario)){
+                $respuesta = array(
+                    'respuesta' => 'correcto',
+                    'id' => $id_usuario,
+                    'nombre' => $nombre_usuario,
+                    'password' => $pass_usuario,
+                    'tipo' => $accion
+                );
+            }else{
+                $respuesta = array(
+                    'error' => 'Contraseña incorrecta',
+    
+                );
+            }
+           
         }else{
             $respuesta = array(
                 'error' => 'Usuario no existe'
