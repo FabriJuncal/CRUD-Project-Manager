@@ -4,8 +4,8 @@ $accion = $_POST['accion'];
 $password = $_POST['password'];
 $usuario = $_POST['usuario'];
 
-if($accion === 'crear'){
-    //Codigo para crear  los Administradores
+if($accion === 'crear'){ //Codigo para CREAR los Administradores
+    
 
     //Hasheamos los password
     $opciones = array(
@@ -60,8 +60,7 @@ if($accion === 'crear'){
 
 
 
-}else if($accion === 'login'){
-    //Codigo para logear a los Admnistradores
+}else if($accion === 'login'){ //Codigo para LOGEAR a los Admnistradores
 
        //Importamos la conexion
        include '../funciones/conexion.php';
@@ -73,17 +72,21 @@ if($accion === 'crear'){
         $stmt->execute();
 
         //Logeamos al Usuario
+
+        //bind_result(): Le pasamos como parametro las variables donde se almacenará el resultado que obtenemos de la consulta.
         $stmt->bind_result($id_usuario, $nombre_usuario, $pass_usuario);
+
+        // fetch(): Obtiene el/los resultado/dos de la consulta, en el caso que devuelva mas de una fila, se deberá que recorrer con un WHILE para obtener todos los datos del fetch().
         $stmt->fetch();
+     
+        
+        if($nombre_usuario){ // Verificamos si el Nombre de Usuario existe
 
-        // Verificamos si el Nombre de Usuario existe
-        if($nombre_usuario){
-
-            // Verificamos que la Contraseña sea correcta
+           
 
             // password_verify: Recibe dos parametros, la contraseña que el usuario ingreso y la contraseña hasheada que obtenemos de la base de datos.
 
-            if(password_verify($password,$pass_usuario)){
+            if(password_verify($password,$pass_usuario)){  // Verificamos que la Contraseña sea correcta
                 $respuesta = array(
                     'respuesta' => 'correcto',
                     'id' => $id_usuario,
@@ -91,23 +94,24 @@ if($accion === 'crear'){
                     'password' => $pass_usuario,
                     'tipo' => $accion
                 );
-            }else{
+            }else{ // En el caso que la contraseña sea incorrecta
                 $respuesta = array(
                     'error' => 'Contraseña incorrecta',
     
                 );
             }
            
-        }else{
+        }else{ // En el caso que el Nombre de Usuario no exista
             $respuesta = array(
                 'error' => 'Usuario no existe'
             );
         }
         
 
-
+        // Cerramos las conexiones
         $stmt->close();
         $conn->close();
+
        }catch(Exception $e){
         // En caso de error , tomar la excepcion
         $respuesta = array(
@@ -116,4 +120,5 @@ if($accion === 'crear'){
     }
 }
 
+// Retornamos el valor mediante AJAX
 echo json_encode($respuesta);
