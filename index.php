@@ -1,19 +1,13 @@
 <?php
   // Librerias creadas
-  include 'inc/funciones/sesiones.php';
-  include 'inc/templates/header.php';
+  include 'inc/funciones/sesiones.php'; // Importamos la SESION para que los usuarios no puedan ingresar a index.php mediante la URL
+  include 'inc/templates/header.php'; // Importamos el encabezado
+  include 'inc/templates/barra.php'; // Importamos la barra de menu
 
-
-  echo '<pre>';
-    var_dump($_SESSION);
-  echo '</pre>';
 ?>
 
 
-<div class="barra">
-    <h1>UpTask - Administración de Proyectos</h1>
-    <a href="#">Cerrar Sesión</a>
-</div>
+
 
 <div class="contenedor">
     <aside class="contenedor-proyectos">

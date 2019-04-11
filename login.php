@@ -1,7 +1,12 @@
 <?php
   // Librerias creadas
   include 'inc/templates/header.php';
+  
 
+  session_start();
+  if(isset($_GET['cerrar_sesion'])){
+      $_SESSION = array();
+  }
 ?>
 
     <div class="contenedor-formulario">
