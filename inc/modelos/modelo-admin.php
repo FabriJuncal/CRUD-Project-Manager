@@ -80,13 +80,13 @@ if($accion === 'crear'){ //Codigo para CREAR los Administradores
         $stmt->fetch();
      
         
-        if($nombre_usuario){ // Verificamos si el Nombre de Usuario existe
+        if($nombre_usuario){ // Verificamos si el Nombre de Usuario EXISTE
 
            
 
             // password_verify: Recibe dos parametros, la contraseña que el usuario ingreso y la contraseña hasheada que obtenemos de la base de datos.
 
-            if(password_verify($password,$pass_usuario)){  // Verificamos que la Contraseña sea correcta
+            if(password_verify($password,$pass_usuario)){  // Verificamos que la Contraseña sea CORRECTA
                 $respuesta = array(
                     'respuesta' => 'correcto',
                     'id' => $id_usuario,
@@ -94,14 +94,14 @@ if($accion === 'crear'){ //Codigo para CREAR los Administradores
                     'password' => $pass_usuario,
                     'tipo' => $accion
                 );
-            }else{ // En el caso que la contraseña sea incorrecta
+            }else{ // En el caso que la contraseña sea INCORRECTA
                 $respuesta = array(
-                    'error' => 'Contraseña incorrecta',
-    
+                    'error' => 'Contraseña incorrecta'
+
                 );
             }
            
-        }else{ // En el caso que el Nombre de Usuario no exista
+        }else{ // En el caso que el Nombre de Usuario NO EXISTA
             $respuesta = array(
                 'error' => 'Usuario no existe'
             );

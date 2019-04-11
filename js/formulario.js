@@ -57,16 +57,37 @@ function validarRegistro(e) {
                             text: 'El usuario  se creo correctamente',
                             type: 'success'
                         });
-                     }
-                     
+                     }else if(respuesta.tipo === 'login'){
+                      
+                        Swal.fire({
+                            title: '¡Login Correcto!',
+                            text: 'Has iniciado sesion correctamente',
+                            type: 'success'
+                        })
+                        .then(resultado => {
+                            if(resultado.value){
+                                window.location.href = 'index.php';
+                            }
+                        })
+                    }
                 }else{ // En el caso que halla un error
                   
-                    Swal.fire({
+                   
+                    if(respuesta.error === 'Usuario no existe'){  // En el caso que NO EXISTA el Nombre de Usuario
+                        Swal.fire({
                         
-                        title: '¡ERROR!',
-                        text: 'Hubo un error',
-                        type: 'error'
-                    });
+                            title: '¡ERROR!',
+                            text: 'El Nombre de Usuario no existe',
+                            type: 'error'
+                        });
+                    }else if(respuesta.error === 'Contraseña incorrecta'){  // En el caso que la contraseña sea INCORRECTA
+                        Swal.fire({
+                        
+                            title: '¡ERROR!',
+                            text: 'Contraseña incorrecta',
+                            type: 'error'
+                        });
+                    }
                 }
             }
         }
