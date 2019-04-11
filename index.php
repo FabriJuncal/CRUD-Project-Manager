@@ -1,7 +1,12 @@
 <?php
   // Librerias creadas
+  include 'inc/funciones/sesiones.php';
   include 'inc/templates/header.php';
 
+
+  echo '<pre>';
+    var_dump($_SESSION);
+  echo '</pre>';
 ?>
 
 

@@ -66,7 +66,7 @@ if($accion === 'crear'){ //Codigo para CREAR los Administradores
        include '../funciones/conexion.php';
 
        try{
-
+        // Realizamos la consulta a la base de datos con PREPARE STATEMENT
         $stmt = $conn->prepare("SELECT id, usuario, password FROM usuarios WHERE usuario = ?");
         $stmt->bind_param('s', $usuario);
         $stmt->execute();
@@ -82,11 +82,19 @@ if($accion === 'crear'){ //Codigo para CREAR los Administradores
         
         if($nombre_usuario){ // Verificamos si el Nombre de Usuario EXISTE
 
-           
-
             // password_verify: Recibe dos parametros, la contraseña que el usuario ingreso y la contraseña hasheada que obtenemos de la base de datos.
 
             if(password_verify($password,$pass_usuario)){  // Verificamos que la Contraseña sea CORRECTA
+
+                // Iniciamos Sesion
+                session_start();
+                $_SESSION['id'] = $id_usuario;
+                $_SESSION['nombre'] = $nombre_usuario;
+                $_SESSION['login'] = true;
+
+
+
+
                 $respuesta = array(
                     'respuesta' => 'correcto',
                     'id' => $id_usuario,
