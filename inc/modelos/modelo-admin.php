@@ -87,14 +87,18 @@ if($accion === 'crear'){ //Codigo para CREAR los Administradores
             if(password_verify($password,$pass_usuario)){  // Verificamos que la Contraseña sea CORRECTA
 
                 // Iniciamos Sesion
-                session_start();
+
+                // session_start(): Crea una sesión o reanuda la actual basada en un identificador de sesión pasado mediante una petición GET o POST, o pasado mediante una cookie.
+                session_start(); 
+
+                // Le asignamos valores a al Array $_SESSION para luego IDENTIFICAR SU VALORES y AUTENTICAR AL USUARIO
                 $_SESSION['id'] = $id_usuario;
                 $_SESSION['nombre'] = $nombre_usuario;
                 $_SESSION['login'] = true;
 
 
 
-
+                // Respuesta que se logeo correctamente
                 $respuesta = array(
                     'respuesta' => 'correcto',
                     'id' => $id_usuario,
@@ -102,6 +106,7 @@ if($accion === 'crear'){ //Codigo para CREAR los Administradores
                     'password' => $pass_usuario,
                     'tipo' => $accion
                 );
+                
             }else{ // En el caso que la contraseña sea INCORRECTA
                 $respuesta = array(
                     'error' => 'Contraseña incorrecta'
