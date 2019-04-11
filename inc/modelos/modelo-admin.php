@@ -30,12 +30,18 @@ if($accion = 'crear'){
         //     'error' => $stmt->error              }      =>  AL REALIZAR UNA CONSULTA A LA BASE DE DATOS
         // );
 
-        // Condicional en el caso que alguna fila halla sido afectada por la consulta
-        if($stmt->affected_rows){
+        
+        if($stmt->affected_rows > 0){ // Condicional en el caso que alguna fila halla sido afectada por la consulta
+
             $respuesta = array(
                 'respuesta' => 'correcto',
                 'id_insertado' => $stmt->insert_id,
                 'tipo' => $accion
+            );
+
+        }else{
+            $respuesta = array( // Condicional en el caso que ninguna fila halla sido afectada por la consulta
+                'respuesta' => 'error'
             );
         }
 

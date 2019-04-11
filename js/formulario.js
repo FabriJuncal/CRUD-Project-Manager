@@ -44,7 +44,30 @@ function validarRegistro(e) {
         xhr.onload = function(){
             // Verificamos si el Status de conexion es igual a 200, esto quiere decir que la conexion se realizo con exito
             if(this.status === 200){
-                console.log(JSON.parse(xhr.responseText));  
+                var respuesta = JSON.parse(xhr.responseText);
+
+                
+                if(respuesta.respuesta === 'correcto'){ // Si la respuesta es correcta
+                    
+                    // Si es un nuevo usuario
+                     if(respuesta.tipo === 'crear'){
+                      
+                        Swal.fire({
+                            title: '¡Usuario Creado!',
+                            text: 'El usuario  se creo correctamente',
+                            type: 'success'
+                        });
+                     }
+                     
+                }else{ // En el caso que halla un error
+                  
+                    Swal.fire({
+                        
+                        title: '¡ERROR!',
+                        text: 'Hubo un error',
+                        type: 'error'
+                    });
+                }
             }
         }
 
