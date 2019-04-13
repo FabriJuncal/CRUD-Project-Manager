@@ -5,8 +5,6 @@ $proyecto = $_POST['proyecto'];
 
 if($accion === 'crear'){ //Codigo para CREAR los Proyectos
 
-    
-
     //Importamos la conexion
     include '../funciones/conexion.php';
 
