@@ -65,7 +65,7 @@ function guardarProyectoBD(nombreProyecto){
                         var nuevoProyecto = document.createElement('li');
 
                         nuevoProyecto.innerHTML = `
-                            <a href="index.php?id_respuesta=${id_proyecto}" id=${id_proyecto}>
+                            <a href="index.php?id_proyecto=${id_proyecto}" id=${id_proyecto}>
                                 ${proyecto}
                             </a>
                         `;
@@ -80,7 +80,7 @@ function guardarProyectoBD(nombreProyecto){
                         })
                         .then(resultado =>{ // Redireccionamos al proyecto recien creado
                             if(resultado.value){
-                                window.location.href = 'index.php?id_respuesta=' + id_proyecto;
+                                window.location.href = 'index.php?id_proyecto=' + id_proyecto;
                             }
                         });
                     }

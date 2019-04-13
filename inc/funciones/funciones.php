@@ -41,3 +41,20 @@ $ _SERVER ['PHP_SELF']: Este es el nombre de archivo del script que se está eje
     $pagina = str_replace(".php", "", $archivo);
     return $pagina;
 }
+
+
+/**  CONSULTAS **/
+
+// Obtenemos todos los Proyectos de la Base de Datos
+function obtenerProyectos(){
+  include 'conexion.php'; // Obtenemos la conexion
+
+  try {
+    // Obtenemos todos los Proyectos de la Base de Datos
+    return $conn->query('SELECT id, nombre FROM proyectos');
+
+  } catch (Exception $e) { // En caso de ERROR lo Imprimimos
+    echo 'Error!: ' . $e->getMessage();
+    return false;
+  }
+}
