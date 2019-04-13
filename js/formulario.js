@@ -51,20 +51,20 @@ function validarRegistro(e) {
                     
                     // Si es un nuevo usuario
                      if(respuesta.tipo === 'crear'){
-                      
+                      // Plugin.js - Alerta con animacion - SweetAlert2
                         Swal.fire({
                             title: '¡Usuario Creado!',
                             text: 'El usuario  se creo correctamente',
                             type: 'success'
                         });
                      }else if(respuesta.tipo === 'login'){
-                      
+                      // Plugin.js - Alerta con animacion - SweetAlert2
                         Swal.fire({
                             title: '¡Login Correcto!',
                             text: 'Has iniciado sesion correctamente',
                             type: 'success'
                         })
-                        .then(resultado => {
+                        .then(resultado => { // Redireccionamos al archivo index.php
                             if(resultado.value){
                                 window.location.href = 'index.php';
                             }
@@ -74,15 +74,15 @@ function validarRegistro(e) {
                   
                    
                     if(respuesta.error === 'Usuario no existe'){  // En el caso que NO EXISTA el Nombre de Usuario
+                    // Plugin.js - Alerta con animacion - SweetAlert2    
                         Swal.fire({
-                        
                             title: '¡ERROR!',
                             text: 'El Nombre de Usuario no existe',
                             type: 'error'
                         });
                     }else if(respuesta.error === 'Contraseña incorrecta'){  // En el caso que la contraseña sea INCORRECTA
+                    // Plugin.js - Alerta con animacion - SweetAlert2
                         Swal.fire({
-                        
                             title: '¡ERROR!',
                             text: 'Contraseña incorrecta',
                             type: 'error'

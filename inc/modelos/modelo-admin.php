@@ -35,7 +35,7 @@ if($accion === 'crear'){ //Codigo para CREAR los Administradores
 
             $respuesta = array(
                 'respuesta' => 'correcto',
-                'id_insertado' => $stmt->insert_id,
+                'id_usuario' => $stmt->insert_id,
                 'tipo' => $accion
             );
 

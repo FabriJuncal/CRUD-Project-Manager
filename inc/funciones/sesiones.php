@@ -3,7 +3,7 @@
 // Funcion que verifica que el usuario NO este LOGEADO y lo redirecciona al login.php
 function usuario_autenticado(){
     if(!revisar_usuario()){
-        header('Location:login.php');
+        header('Location:login.php'); // Redirecciona al archivo login.php
         exit();
     }
 }
