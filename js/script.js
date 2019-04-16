@@ -111,11 +111,36 @@ function agregarTarea(e){
     var nombreTarea = document.querySelector('.nombre-tarea').value;
 
     // Validamos que el campo tenga algo escrito
-    if(nombreTarea === ""){
+    if(nombreTarea === ""){ // En el caso que la Tarea este vacia
         Swal.fire({
             title: '¡ERROR!',
             text: 'Una tarea no puede ir vacia',
             type: 'error'
         })
+    }else{ // En el caso que la Tarea contenga un texto
+
+        // Creamos el objeto AJAX
+        var xhr = new XMLHttpRequest();
+
+        // Creamos el FormData() para enviar los datos que queremos 
+        var datos = new FormData();
+        datos.append('tarea', nombreTarea);
+        datos.append('tipo', 'crear');
+        datos.append('id_proyecto', document.querySelector('#id_proyecto').value);
+
+        // Abrimos la conexion
+        xhr.open('POST', 'inc/modelos/modelo-tarea.php', true);
+
+        // Ejecutamos la respuesta
+        xhr.onload = function(){
+            if(this.status === 200){ // En el caso que este todo Correcto
+                var respuesta = JSON.parse(xhr.responseText);
+                console.log(respuesta);
+            }
+        }
+
+        // Enviamos la consulta
+        xhr.send(datos);
     }
+   
 }
