@@ -8,9 +8,12 @@ function eventListeners(){ // Funcion para agregar los Eventos con sus Funciones
 
     //Boton para Crer Proyectos
     document.querySelector('.crear-proyecto a').addEventListener('click', nuevoProyecto);
+
+    //Boton para Agregar una Tarea a un Proyecto
+    document.querySelector('.nueva-tarea').addEventListener('click', agregarTarea);
 }
 
-function nuevoProyecto(e){
+function nuevoProyecto(e){ // Creamos el evento para crear un Nuevo Proyecto y lo mostramos en el Frontend
     e.preventDefault(); // Quitamos el evento predeterminado
 
     // Creamos un <input> para el nombre  del nuevo proyecto
@@ -35,7 +38,7 @@ function nuevoProyecto(e){
     })
 }
 
-function guardarProyectoBD(nombreProyecto){
+function guardarProyectoBD(nombreProyecto){ // Mediante AJAX Guardamos el Proyecto en la base de datos
     
     //1) Creamos el objeto AJAX
     var xhr = new XMLHttpRequest();
@@ -99,4 +102,20 @@ function guardarProyectoBD(nombreProyecto){
     xhr.send(datos);
 
     
+}
+
+function agregarTarea(e){
+
+    e.preventDefault(); // Quitamos el evento predeterminado
+
+    var nombreTarea = document.querySelector('.nombre-tarea').value;
+
+    // Validamos que el campo tenga algo escrito
+    if(nombreTarea === ""){
+        Swal.fire({
+            title: '¡ERROR!',
+            text: 'Una tarea no puede ir vacia',
+            type: 'error'
+        })
+    }
 }
