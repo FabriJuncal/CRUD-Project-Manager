@@ -125,18 +125,22 @@ function agregarTarea(e){
         // Creamos el FormData() para enviar los datos que queremos 
         var datos = new FormData();
         datos.append('tarea', nombreTarea);
-        datos.append('tipo', 'crear');
+        datos.append('accion', 'crear');
         datos.append('id_proyecto', document.querySelector('#id_proyecto').value);
 
         // Abrimos la conexion
         xhr.open('POST', 'inc/modelos/modelo-tarea.php', true);
 
         // Ejecutamos la respuesta
+        
         xhr.onload = function(){
             if(this.status === 200){ // En el caso que este todo Correcto
+
                 var respuesta = JSON.parse(xhr.responseText);
                 console.log(respuesta);
             }
+            
+            ;
         }
 
         // Enviamos la consulta
