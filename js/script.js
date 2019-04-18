@@ -132,12 +132,62 @@ function agregarTarea(e){
         xhr.open('POST', 'inc/modelos/modelo-tarea.php', true);
 
         // Ejecutamos la respuesta
-        
         xhr.onload = function(){
             if(this.status === 200){ // En el caso que este todo Correcto
 
                 var respuesta = JSON.parse(xhr.responseText);
-                console.log(respuesta);
+                
+                var resultado = respuesta.respuesta,
+                    tarea = respuesta.tarea,
+                    id_proyecto = respuesta.id_proyecto,
+                    tipo = respuesta.tipo;
+                
+                if(resultado === 'correcto'){//se agrego correctamente
+                    if(tipo === 'crear'){// En el caso que la accion es CREAR
+                        // Alerta del plugin SweetAlert2
+                        swal.fire({
+                            type: 'success',
+                            title: 'Tarea Creada',
+                            text: 'La tarea: "' + tarea + '" se creó correctamente'
+                         });
+
+                         // Construimos un Template
+                         var nuevaTarea = document.createElement('li');
+
+                         // Agregamos  el ID
+                         nuevaTarea.id = 'tarea:' + id_proyecto;
+
+                         // Agregamos la Clase "tarea"
+                         nuevaTarea.classList.add('tarea');
+
+                         // Construimos el HTML
+                         nuevaTarea.innerHTML = `
+                            <p>${tarea}</p>
+                            <div class="acciones">
+                                <i class="far fa-check-circle"></i>
+                                <i class="fas fa-trash"></i>
+                            </div>
+                         `;
+
+                         // Agregamos el HTML
+                         var listado = document.querySelector('.listado-pendientes ul');
+                         listado.appendChild(nuevaTarea);
+
+                         // Limpiamos el formulario
+                         document.querySelector('.agregar-tarea').reset();
+
+                    }
+                    
+
+                }else{// Hubo un error
+                    // Alerta del plugin SweetAlert2
+                    swal.fire({
+                        type: 'error',
+                        title: '¡ERROR!',
+                        text: 'Hubo un error...'
+                    });
+
+                }
             }
             
             ;
