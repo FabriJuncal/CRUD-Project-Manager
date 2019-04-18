@@ -52,14 +52,31 @@
 
         <div class="listado-pendientes">
             <ul>
+<?php
+                    // Obtenemos las Tareas del Proyecto seleccionado
+                    $tareas = obtenerTareaProyecto($id_proyecto);
 
-                <li id="tarea:<?php echo $tarea['id'] ?>" class="tarea">
-                <p>Cambiar el Logotipo</p>
-                    <div class="acciones">
-                        <i class="far fa-check-circle"></i>
-                        <i class="fas fa-trash"></i>
-                    </div>
-                </li>  
+                    if($tareas->num_rows > 0){ // En el caso que el Proyecto TENGA Tareas
+                        foreach($tareas as $tarea){
+?>
+                            <li id="tarea:<?php echo $tarea['id'] ?>" class="tarea">
+                            <p><?php echo $tarea['nombre'] ?></p>
+                                <div class="acciones">
+                                    <!-- Hacemos uso del OPERADOR TERNARIO de PHP: Es una condicional en una sola linea -->
+                                    <i class="far fa-check-circle <?php echo ($tarea['estado'] === '1' ? 'completo' : '') ?>"></i>
+                                    <i class="fas fa-trash"></i>
+                                </div>
+                            </li>  
+<?php                           
+                        }
+
+                    }else{ // En el caso que el Proyecto NO TENGA Tareas
+                        echo '<p> No hay tareas en este Proyecto </p>';
+                    }
+                    
+?>
+
+                
             </ul>
         </div>
     </main>
