@@ -233,7 +233,7 @@ function cambiarEstadoTarea(tarea, estado){ // Cambiamos el los valores de la Ba
 
     //2) Creamos el FormData para enviar por AJAX
     var datos = new FormData();
-    datos.append('id', idTarea[1]);
+    datos.append('id_tarea', idTarea[1]);
     datos.append('accion', 'actualizar');
     datos.append('estado', estado);   
 
