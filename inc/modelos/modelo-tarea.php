@@ -1,7 +1,22 @@
-<?php
-$tarea = $_POST['tarea'];
+<?php 
+
+/** VERIFICAMOS QUE EXISTAN LOS SIGUIENTES "POST" ANTES DE DECLARARLAS A UNA VARIABLE **/
+
+if(isset( $_POST['id_proyecto'])){
+    $id_proyecto = (int) $_POST['id_proyecto'];
+}
+
+if(isset( $_POST['tarea'])){
+    $tarea = $_POST['tarea'];
+}
+
+if(isset( $_POST['estado'])){
+    $tarea = $_POST['estado'];
+}
+
+
 $accion = $_POST['accion'];
-$id_proyecto = (int) $_POST['id_proyecto'];
+
 
 if($accion === 'crear'){ //Codigo para CREAR las tareas
 
@@ -50,5 +65,9 @@ if($accion === 'crear'){ //Codigo para CREAR las tareas
 
 }
 
+if($accion === 'actualizar'){
+    echo json_encode($_POST);
+}
+
 // Retornamos el valor mediante AJAX
-echo json_encode($respuesta);
+// echo json_encode($respuesta);

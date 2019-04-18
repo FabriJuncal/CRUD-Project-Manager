@@ -1,10 +1,9 @@
 <?php
 
-// Obtenemos un string con el nombre de la pagina en la que nos encontramos
-function obtenerPaginaActual() {
+
+function obtenerPaginaActual() { // Obtenemos un string con el nombre de la pagina en la que nos encontramos
 
 /*
-
 pathinfo(): Devuelve información sobre la ruta de un archivo. Devuelve string si sólo se indica una opción de $options, o un array si se solicitan todas.
 
 $directorio = "este/es/un/directorio/cualquiera.csv";
@@ -45,8 +44,7 @@ $ _SERVER ['PHP_SELF']: Este es el nombre de archivo del script que se está eje
 
 /**  CONSULTAS **/
 
-// Obtenemos todos los Proyectos de la Base de Datos
-function obtenerProyectos(){
+function obtenerProyectos(){ // Obtenemos todos los Proyectos de la Base de Datos
   include 'conexion.php'; // Obtenemos la conexion
 
   try {
@@ -59,8 +57,8 @@ function obtenerProyectos(){
   }
 }
 
-// Obtenemos el Nombre del Proyecto de la Base de Datos
-function obtenerNombreProyecto($id = NULL){
+
+function obtenerNombreProyecto($id = NULL){ // Obtenemos el Nombre del Proyecto de la Base de Datos
   include 'conexion.php'; // Obtenemos la conexion
 
   try {
@@ -73,12 +71,12 @@ function obtenerNombreProyecto($id = NULL){
   }
 }
 
-// Obtenemos las Tareas de un Proyecto en especifico
-function obtenerTareaProyecto($id = NULL){
+
+function obtenerTareaProyecto($id = NULL){ // Obtenemos las Tareas de un Proyecto en especifico
   include 'conexion.php'; // Obtenemos la conexion
 
   try {
-    // Obtenemos todos los Proyectos de la Base de Datos
+    // Obtenemos todos las Tareas de un Proyecto en especifico 
   return $conn->query("SELECT id, nombre, estado FROM tareas WHERE id_proyecto = {$id}");
 
   } catch (Exception $e) { // En caso de ERROR lo Imprimimos

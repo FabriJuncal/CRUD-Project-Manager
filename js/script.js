@@ -11,6 +11,9 @@ function eventListeners(){ // Funcion para agregar los Eventos con sus Funciones
 
     //Boton para Agregar una Tarea a un Proyecto
     document.querySelector('.nueva-tarea').addEventListener('click', agregarTarea);
+
+    // Botones para las Acciones de las Tareas
+    document.querySelector('.listado-pendientes').addEventListener('click', accionesTareas);
 }
 
 function nuevoProyecto(e){ // Creamos el evento para crear un Nuevo Proyecto y lo mostramos en el Frontend
@@ -104,7 +107,7 @@ function guardarProyectoBD(nombreProyecto){ // Mediante AJAX Guardamos el Proyec
     
 }
 
-function agregarTarea(e){
+function agregarTarea(e){ // Inyectamos la Tarea al HTML para mostrar la tarea recien creada sin tener la necesidad de recargar
 
     e.preventDefault(); // Quitamos el evento predeterminado
 
@@ -197,4 +200,53 @@ function agregarTarea(e){
         xhr.send(datos);
     }
    
+}
+
+function accionesTareas(e){ // Cambiamos el estado  de las Tareas o las Eliminamos
+    e.preventDefault();
+
+    // .target: Con esta funcion podemos saber a que nodo HTML se le dio CLICK, se le conoce como DELEGATION
+
+    if(e.target.classList.contains('fa-check-circle')){ // En el caso que hagamos CLICK en el ICONO DEL CIRCULO
+
+        if(e.target.classList.contains('completo')){ // En el caso que el icono seleccionado CONTENGA la clase "completo"
+            // Removemos la clase
+            e.target.classList.remove('completo');
+            cambiarEstadoTarea(e.target, 0);
+
+        }else{ // En el caso que el icono seleccionado NO CONTENGA la clase "completo"
+            e.target.classList.add('completo');
+            cambiarEstadoTarea(e.target, 1);
+        }
+
+    }else if(e.target.classList.contains('fa-trash')){ // En el caso que hagamos CLICK en el ICONO DE BORRAR
+        console.log('Click en el icono de borrar')
+    }
+
+}
+
+function cambiarEstadoTarea(tarea, estado){ // Cambiamos el los valores de la Base de Datos que hacen referencia al Estado de la Tarea
+    var idTarea = tarea.parentElement.parentElement.id.split(':');
+
+    //1) Creamos el objeto AJAX
+    var xhr = new XMLHttpRequest();
+
+    //2) Creamos el FormData para enviar por AJAX
+    var datos = new FormData();
+    datos.append('id', idTarea[1]);
+    datos.append('accion', 'actualizar');
+    datos.append('estado', estado);   
+
+    // Abrimos la conexion
+    xhr.open('POST', 'inc/modelos/modelo-tarea.php', true);
+    
+    //4) Recibimos los datos del servidor
+    xhr.onload = function(){
+        if(this.status === 200){
+            console.log(JSON.parse(xhr.responseText));
+        }
+    }
+
+    //5) Enviamos la peticion
+    xhr.send(datos);
 }
