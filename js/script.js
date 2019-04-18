@@ -220,7 +220,36 @@ function accionesTareas(e){ // Cambiamos el estado  de las Tareas o las Eliminam
         }
 
     }else if(e.target.classList.contains('fa-trash')){ // En el caso que hagamos CLICK en el ICONO DE BORRAR
-        console.log('Click en el icono de borrar')
+
+        // Alerta pregunta si se desea Eliminar
+        Swal.fire({
+            title: '¿Esta seguro?',
+            text: "¡No podrás revertir esto!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '¡Si, bórralo!',
+            cancelButtonText: 'Cancelar'
+          }).then((result) => {
+            if (result.value) {
+
+                var tareaEliminar = e.target.parentElement.parentElement
+                // Borrar de la BD
+
+                // Borrar del HTML
+                tareaEliminar.remove();
+
+                // Alerta de Eliminado
+                Swal.fire({
+                title: '¡Eliminado!',
+                text: "Su archivo ha sido eliminado.",
+                type: 'success',
+                confirmButtonText: 'DE ACUERDO',
+                
+                })
+            }
+          })
     }
 
 }
