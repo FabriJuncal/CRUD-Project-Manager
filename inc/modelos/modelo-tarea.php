@@ -26,7 +26,7 @@ if(isset( $_POST['estado'])){
 $accion = $_POST['accion'];
 
 
-if($accion === 'crear'){ //Codigo para CREAR las tareas
+if($accion === 'crear'){ //CODIGO PARA CREAR LAS TAREAS
 
     //Importamos la conexion
     include '../funciones/conexion.php';
@@ -73,7 +73,8 @@ if($accion === 'crear'){ //Codigo para CREAR las tareas
 
 }
 
-if($accion === 'actualizar'){
+
+if($accion === 'actualizar'){ // CODIGO PARA ACTUALIZAR LAS TAREAS
     //Importamos la conexion
     include '../funciones/conexion.php';
 
@@ -81,6 +82,51 @@ if($accion === 'actualizar'){
         // Realizamos la consulta a la base de datos con PREPARE STATEMENT
         $stmt = $conn->prepare("UPDATE tareas SET estado = ? WHERE id = ?");
         $stmt->bind_param('ii', $estado, $id_tarea);
+        $stmt->execute();
+
+        // $respuesta = array(                      }
+        //     'respuesta' => $stmt->error_list,    }      =>  ESTE CODIGO SIRVE PARA DEBUGEAR CUANDO OBTENEMOS UN ERROR        
+        //     'error' => $stmt->error              }      =>  AL REALIZAR UNA CONSULTA A LA BASE DE DATOS
+        // );
+
+        
+        if($stmt->affected_rows > 0){ // Condicional en el caso que alguna fila halla sido afectada por la consulta
+
+            $respuesta = array(
+                'respuesta' => 'correcto',
+                
+            );
+
+        }else{
+            $respuesta = array( // Condicional en el caso que ninguna fila halla sido afectada por la consulta
+                'respuesta' => 'error'
+            );
+        }
+
+
+        // Cerramos las conexiones
+        $stmt->close();
+        $conn->close();
+
+       
+    }catch(Exception $e){
+        // En caso de error , tomar la excepcion
+        $respuesta = array(
+            'error' => $e->getMessage()
+        );
+    }
+
+}
+
+
+if($accion === 'eliminar'){ // CODIGO PARA ELIMINAR LAS TAREAS
+    //Importamos la conexion
+    include '../funciones/conexion.php';
+
+    try{
+        // Realizamos la consulta a la base de datos con PREPARE STATEMENT
+        $stmt = $conn->prepare("DELETE FROM tareas WHERE id = ?");
+        $stmt->bind_param('i',$id_tarea);
         $stmt->execute();
 
         // $respuesta = array(                      }

@@ -236,7 +236,7 @@ function accionesTareas(e){ // Cambiamos el estado  de las Tareas o las Eliminam
 
                 var tareaEliminar = e.target.parentElement.parentElement
                 // Borrar de la BD
-
+                eliminarTareaBD(tareaEliminar); 
                 // Borrar del HTML
                 tareaEliminar.remove();
 
@@ -252,6 +252,32 @@ function accionesTareas(e){ // Cambiamos el estado  de las Tareas o las Eliminam
           })
     }
 
+}
+
+function eliminarTareaBD(tarea){
+    var idTarea = tarea.id.split(':');
+
+    //1) Creamos el objeto AJAX
+    var xhr = new XMLHttpRequest();
+
+    //2) Creamos el FormData para enviar por AJAX
+    var datos = new FormData();
+    datos.append('id_tarea', idTarea[1]);
+    datos.append('accion', 'eliminar');
+  
+
+    // Abrimos la conexion
+    xhr.open('POST', 'inc/modelos/modelo-tarea.php', true);
+    
+    //4) Recibimos los datos del servidor
+    xhr.onload = function(){
+        if(this.status === 200){
+            console.log(JSON.parse(xhr.responseText));
+        }
+    }
+
+    //5) Enviamos la peticion
+    xhr.send(datos);
 }
 
 function cambiarEstadoTarea(tarea, estado){ // Cambiamos el los valores de la Base de Datos que hacen referencia al Estado de la Tarea
