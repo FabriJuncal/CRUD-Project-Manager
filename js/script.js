@@ -383,9 +383,7 @@ function barraProgreso(){ // Verificamos la lista de Tareas y segun halla o no T
     var listaTareasRestantes = document.querySelectorAll('li.tarea');
 
     if(listaTareasRestantes.length === 0){ // En el caso que no halla Tareas Restantes, se muestra el siguiente mensaje de Lista Vacia
-        console.log('NO MOSTRAMOS BARRA DE PROGRESO');
 
-        
         if( document.querySelector('span.barra-progreso')){ // En el caso que existe el Nodo
         // Si el Proyecto no contiene Tareas, Eliminamos el nodo de la Barra de Progreso
         document.querySelector('span.barra-progreso').remove()
@@ -396,10 +394,10 @@ function barraProgreso(){ // Verificamos la lista de Tareas y segun halla o no T
         document.querySelector('.listado-pendientes ul').innerHTML = '<p class = "lista-vacia"> No hay tareas en este Proyecto </p>';
 
     }else { // En el caso que halla tareas en la lista
-        console.log('MOSTRAMOS BARRA DE PROGRESO');
+
 
         if(!document.querySelector('span.barra-progreso')){ // En el caso que no Exista el NODO
-            console.log('CREAMOS LA BARRA DE PROGRESO');
+
             // Creamos el Nodo de la Barra de Progreso
             var BarraProgreso = document.createElement('span');
             BarraProgreso.classList.add('barra-progreso');
