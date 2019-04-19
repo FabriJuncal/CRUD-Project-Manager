@@ -154,6 +154,13 @@ function agregarTarea(e){ // Inyectamos la Tarea al HTML para mostrar la tarea r
                             text: 'La tarea: "' + tarea + '" se creó correctamente'
                          });
 
+                         // Seleccionamos el parrafo con el mensaje de lista vacia
+                         var parrafoListaVacia = document.querySelectorAll('.lista-vacia');
+
+                         if(parrafoListaVacia.length > 0){ // En el caso que halla tareas en la lista, se remueve el mensaje de lista vacia
+                            document.querySelector('.lista-vacia').remove();
+                         }
+
                          // Construimos un Template
                          var nuevaTarea = document.createElement('li');
 
@@ -273,6 +280,14 @@ function eliminarTareaBD(tarea){
     xhr.onload = function(){
         if(this.status === 200){
             console.log(JSON.parse(xhr.responseText));
+
+            // Comprobamos que halla tareas restantes
+            var listaTareasRestantes = document.querySelectorAll('li.tarea');
+
+            if(listaTareasRestantes.length === 0){ // En el caso que no halla Tareas Restantes, se muestra el siguiente mensaje de Lista Vacia
+
+                document.querySelector('.listado-pendientes ul').innerHTML = '<p class = "lista-vacia"> No hay tareas en este Proyecto </p>';
+            }
         }
     }
 

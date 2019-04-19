@@ -56,7 +56,7 @@
                     // Obtenemos las Tareas del Proyecto seleccionado
                     $tareas = obtenerTareaProyecto($id_proyecto);
 
-                    if($tareas->num_rows > 0){ // En el caso que el Proyecto TENGA Tareas
+                    if($tareas->num_rows > 0){ // En el caso que el Proyecto TENGA Tareas 
                         foreach($tareas as $tarea){
 ?>
                             <li id="tarea:<?php echo $tarea['id'] ?>" class="tarea">
@@ -71,7 +71,7 @@
                         }
 
                     }else{ // En el caso que el Proyecto NO TENGA Tareas
-                        echo '<p> No hay tareas en este Proyecto </p>';
+                        echo '<p class = "lista-vacia"> No hay tareas en este Proyecto </p>';
                     }
                     
 ?>
