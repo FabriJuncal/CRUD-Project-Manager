@@ -46,7 +46,8 @@
         echo "Debes seleccionar un proyecto";
     }
 ?>        
- 
+        <!-- BARRA DE PROGRESO -->
+        <div class="avance"></div>
 
         <h2>Listado de tareas:</h2>
 

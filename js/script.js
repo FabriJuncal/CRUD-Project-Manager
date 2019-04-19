@@ -6,6 +6,12 @@ var listaProyectos = document.querySelector('ul#proyectos');
 
 function eventListeners(){ // Funcion para agregar los Eventos con sus Funciones
 
+    // Se ejecuta la siguiente funcion cuando se carga la Pagina
+    document.addEventListener('DOMContentLoaded', function(){
+        // Verifica si existen Tareas Pendientes y si Existen Actualiza el Progreso
+        barraProgreso();
+    })
+
     //Boton para Crer Proyectos
     document.querySelector('.crear-proyecto a').addEventListener('click', nuevoProyecto);
 
@@ -154,13 +160,6 @@ function agregarTarea(e){ // Inyectamos la Tarea al HTML para mostrar la tarea r
                             text: 'La tarea: "' + tarea + '" se creó correctamente'
                          });
 
-                         // Seleccionamos el parrafo con el mensaje de lista vacia
-                         var parrafoListaVacia = document.querySelectorAll('.lista-vacia');
-
-                         if(parrafoListaVacia.length > 0){ // En el caso que halla tareas en la lista, se remueve el mensaje de lista vacia
-                            document.querySelector('.lista-vacia').remove();
-                         }
-
                          // Construimos un Template
                          var nuevaTarea = document.createElement('li');
 
@@ -185,6 +184,9 @@ function agregarTarea(e){ // Inyectamos la Tarea al HTML para mostrar la tarea r
 
                          // Limpiamos el formulario
                          document.querySelector('.agregar-tarea').reset();
+
+                         // En el caso que Existan Tareas Pendientes, Se mostrará y actualizará la Barra de Progreso
+                         barraProgreso();
 
                     }
                     
@@ -213,7 +215,6 @@ function accionesTareas(e){ // Cambiamos el estado  de las Tareas o las Eliminam
     e.preventDefault();
 
     // .target: Con esta funcion podemos saber a que nodo HTML se le dio CLICK, se le conoce como DELEGATION
-
     if(e.target.classList.contains('fa-check-circle')){ // En el caso que hagamos CLICK en el ICONO DEL CIRCULO
 
         if(e.target.classList.contains('completo')){ // En el caso que el icono seleccionado CONTENGA la clase "completo"
@@ -241,12 +242,6 @@ function accionesTareas(e){ // Cambiamos el estado  de las Tareas o las Eliminam
           }).then((result) => {
             if (result.value) {
 
-                var tareaEliminar = e.target.parentElement.parentElement
-                // Borrar de la BD
-                eliminarTareaBD(tareaEliminar); 
-                // Borrar del HTML
-                tareaEliminar.remove();
-
                 // Alerta de Eliminado
                 Swal.fire({
                 title: '¡Eliminado!',
@@ -255,13 +250,25 @@ function accionesTareas(e){ // Cambiamos el estado  de las Tareas o las Eliminam
                 confirmButtonText: 'DE ACUERDO',
                 
                 })
+
+                
             }
-          })
+
+            var tareaEliminar = e.target.parentElement.parentElement
+
+            // Borrar del HTML
+            tareaEliminar.remove();
+        
+            // Borrar de la BD
+            eliminarTareaBD(tareaEliminar); 
+            
+          })  
+          
     }
 
 }
 
-function eliminarTareaBD(tarea){
+function eliminarTareaBD(tarea){ // Eliminamos la Tarea de la Base de Datos mediante AJAX
     var idTarea = tarea.id.split(':');
 
     //1) Creamos el objeto AJAX
@@ -286,8 +293,22 @@ function eliminarTareaBD(tarea){
 
             if(listaTareasRestantes.length === 0){ // En el caso que no halla Tareas Restantes, se muestra el siguiente mensaje de Lista Vacia
 
+                // Si el Proyecto no contiene Tareas, Eliminamos el nodo de la Barra de Progreso
+                barraProgreso();
+
+                // Mostramos un mensaje que dice que no hay Tareas en el Proyecto
                 document.querySelector('.listado-pendientes ul').innerHTML = '<p class = "lista-vacia"> No hay tareas en este Proyecto </p>';
+
+            }else{
+
+                setTimeout(() => {
+                    // Actualizamos la Barra de Progreso
+                    barraProgreso();
+                },1700)
+              
             }
+
+            
         }
     }
 
@@ -314,9 +335,122 @@ function cambiarEstadoTarea(tarea, estado){ // Cambiamos el los valores de la Ba
     xhr.onload = function(){
         if(this.status === 200){
             console.log(JSON.parse(xhr.responseText));
+
+            // Actualizamos la Barra de Progreso
+            barraProgreso();
         }
     }
 
     //5) Enviamos la peticion
     xhr.send(datos);
+}
+
+// function actualizarProgreso(){ // Va Actualizando la Barra de Progreso cuando se realiza una accion en donde afecte a las Tareas
+  
+//     // Obtenemos todas las Tareas
+//     const tareas = document.querySelectorAll('li.tarea');
+
+//     // Obtenemos las Tareas Completadas
+//     const tareasCompletadas = document.querySelectorAll('i.completo');
+
+//     // Determinamos el Avance
+//     // Math.round: redondea el valor numerico
+//     const avance = Math.round( (tareasCompletadas.length / tareas.length) * 100 );
+
+//     // Asignamos el Avance a la Barra de Progreso
+//     const porcentaje = document.querySelector('#porcentaje');
+//     porcentaje.style.width = avance + '%';
+
+//     // Mostramos Alerta cuando Completamos Todas las Tareas
+//     if(avance === 100){
+
+//         setTimeout(() => {
+//              // Alerta del plugin SweetAlert2
+//         swal.fire({
+//             type: 'success',
+//             title: '¡Progreso Completado!',
+//             text: 'No hay mas tareas pendientes.',
+//             confirmButtonText: 'DE ACUERDO',
+//         });
+//         },3000)
+       
+//     }
+// }
+
+function barraProgreso(){ // Verificamos la lista de Tareas y segun halla o no Tareas  Mostramos u Ocultamos la Barra de Progreso
+
+    // Seleccionamos todos los Nodos 'li.tarea'
+    var listaTareasRestantes = document.querySelectorAll('li.tarea');
+
+    if(listaTareasRestantes.length === 0){ // En el caso que no halla Tareas Restantes, se muestra el siguiente mensaje de Lista Vacia
+        console.log('NO MOSTRAMOS BARRA DE PROGRESO');
+
+        
+        if( document.querySelector('span.barra-progreso')){ // En el caso que existe el Nodo
+        // Si el Proyecto no contiene Tareas, Eliminamos el nodo de la Barra de Progreso
+        document.querySelector('span.barra-progreso').remove()
+        }
+
+
+        // Mostramos un mensaje que dice que no hay Tareas en el Proyecto
+        document.querySelector('.listado-pendientes ul').innerHTML = '<p class = "lista-vacia"> No hay tareas en este Proyecto </p>';
+
+    }else { // En el caso que halla tareas en la lista
+        console.log('MOSTRAMOS BARRA DE PROGRESO');
+
+        if(!document.querySelector('span.barra-progreso')){ // En el caso que no Exista el NODO
+            console.log('CREAMOS LA BARRA DE PROGRESO');
+            // Creamos el Nodo de la Barra de Progreso
+            var BarraProgreso = document.createElement('span');
+            BarraProgreso.classList.add('barra-progreso');
+            BarraProgreso.innerHTML = `
+                <h2>Avance del Proyecto</h2>
+                <div id="barra-avance" class="barra-avance">
+                    <div id="porcentaje" class="porcentaje porcentaje-gradiante"></div>
+                </div>
+            `;
+            document.querySelector('div.avance').appendChild(BarraProgreso);
+        }
+        
+
+        // Actualizamos la Barra de Progreso
+        // Obtenemos todas las Tareas
+        const tareas = document.querySelectorAll('li.tarea');
+
+        // Obtenemos las Tareas Completadas
+        const tareasCompletadas = document.querySelectorAll('i.completo');
+
+        // Determinamos el Avance
+        // Math.round: redondea el valor numerico
+        const avance = Math.round( (tareasCompletadas.length / tareas.length) * 100 );
+
+        // Asignamos el Avance a la Barra de Progreso
+        const porcentaje = document.querySelector('#porcentaje');
+        porcentaje.style.width = avance + '%';
+
+        
+        // Mostramos Alerta cuando Completamos Todas las Tareas
+        if(avance === 100){
+
+            setTimeout(() => {
+                // Alerta del plugin SweetAlert2
+                Swal.fire({
+                    title: '¡Proyecto Completado!',
+                    text: "No hay tareas pendientes.",
+                    type: 'success',
+                    confirmButtonText: 'DE ACUERDO',
+                    
+                })
+            },1000)
+        
+        }
+
+        if(document.querySelector('.lista-vacia')){ // En el caso que exista el Nodo
+            //Removemos el mensaje de lista vacia
+            document.querySelector('.lista-vacia').remove();
+
+        }
+        
+    }
+
 }
