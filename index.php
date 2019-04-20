@@ -41,11 +41,7 @@
             </div>
         </form>
 
-<?php
-    }else{ // En el caso que no se halla seleccionado ningun proyecto
-        echo "Debes seleccionar un proyecto";
-    }
-?>        
+       
         <!-- BARRA DE PROGRESO -->
         <div class="avance"></div>
 
@@ -72,7 +68,9 @@
                         }
 
                     }else{ // En el caso que el Proyecto NO TENGA Tareas
-                        echo '<p class = "lista-vacia"> No hay tareas en este Proyecto </p>';
+?>
+                        <p class = "fuente-secundaria mnj-sin-tareas"> No hay tareas en este Proyecto </p>
+<?php
                     }
                     
 ?>
@@ -82,6 +80,18 @@
         </div>
     </main>
 </div><!--.contenedor-->
+
+<?php
+    }else{ // En el caso que no se halla seleccionado ningun proyecto
+
+?>
+       <div class="listado-pendientes">
+            <h2 class="fuente-secundaria">Selecciona un Proyecto</h2>
+       </div>
+
+<?php
+    }   
+?> 
 
 <?php
   // Librerias creadas

@@ -14,7 +14,10 @@
     <title>UpTask</title>
     <link rel="stylesheet" href="css/fontawesome-all.min.css">
     <link rel="stylesheet" href="https://necolas.github.io/normalize.css/8.0.0/normalize.css">
+    <!-- Fuentes de Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <!-- Estilos del Plugin SweetAlert2 -->
     <link rel="stylesheet" href="css/sweetalert2.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>

@@ -249,3 +249,19 @@ body.index {
     background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
     background-size: 1rem 1rem;
 }
+
+/* Mensaje principal de seleccion de Proyecto */
+
+div.listado-pendientes h2{
+    font-size: 3rem;
+    
+}
+
+.fuente-secundaria{
+    font-family: 'Poppins', sans-serif;
+}
+
+.mnj-sin-tareas{
+    font-size: 1.5rem;
+    text-align: center;
+}

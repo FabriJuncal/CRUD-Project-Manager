@@ -297,7 +297,7 @@ function eliminarTareaBD(tarea){ // Eliminamos la Tarea de la Base de Datos medi
                 barraProgreso();
 
                 // Mostramos un mensaje que dice que no hay Tareas en el Proyecto
-                document.querySelector('.listado-pendientes ul').innerHTML = '<p class = "lista-vacia"> No hay tareas en este Proyecto </p>';
+                document.querySelector('.listado-pendientes ul').innerHTML = '<p class = "fuente-secundaria mnj-sin-tareas"> No hay tareas en este Proyecto </p>';
 
             }else{
 
@@ -345,38 +345,6 @@ function cambiarEstadoTarea(tarea, estado){ // Cambiamos el los valores de la Ba
     xhr.send(datos);
 }
 
-// function actualizarProgreso(){ // Va Actualizando la Barra de Progreso cuando se realiza una accion en donde afecte a las Tareas
-  
-//     // Obtenemos todas las Tareas
-//     const tareas = document.querySelectorAll('li.tarea');
-
-//     // Obtenemos las Tareas Completadas
-//     const tareasCompletadas = document.querySelectorAll('i.completo');
-
-//     // Determinamos el Avance
-//     // Math.round: redondea el valor numerico
-//     const avance = Math.round( (tareasCompletadas.length / tareas.length) * 100 );
-
-//     // Asignamos el Avance a la Barra de Progreso
-//     const porcentaje = document.querySelector('#porcentaje');
-//     porcentaje.style.width = avance + '%';
-
-//     // Mostramos Alerta cuando Completamos Todas las Tareas
-//     if(avance === 100){
-
-//         setTimeout(() => {
-//              // Alerta del plugin SweetAlert2
-//         swal.fire({
-//             type: 'success',
-//             title: '¡Progreso Completado!',
-//             text: 'No hay mas tareas pendientes.',
-//             confirmButtonText: 'DE ACUERDO',
-//         });
-//         },3000)
-       
-//     }
-// }
-
 function barraProgreso(){ // Verificamos la lista de Tareas y segun halla o no Tareas  Mostramos u Ocultamos la Barra de Progreso
 
     // Seleccionamos todos los Nodos 'li.tarea'
@@ -391,7 +359,7 @@ function barraProgreso(){ // Verificamos la lista de Tareas y segun halla o no T
 
 
         // Mostramos un mensaje que dice que no hay Tareas en el Proyecto
-        document.querySelector('.listado-pendientes ul').innerHTML = '<p class = "lista-vacia"> No hay tareas en este Proyecto </p>';
+        document.querySelector('.listado-pendientes ul').innerHTML = '<p class = "fuente-secundaria mnj-sin-tareas"> No hay tareas en este Proyecto </p>';
 
     }else { // En el caso que halla tareas en la lista
 
@@ -434,7 +402,7 @@ function barraProgreso(){ // Verificamos la lista de Tareas y segun halla o no T
                 // Alerta del plugin SweetAlert2
                 Swal.fire({
                     title: '¡Proyecto Completado!',
-                    text: "No hay tareas pendientes.",
+                    text: "No hay tareas pendientes en el Proyecto.",
                     type: 'success',
                     confirmButtonText: 'DE ACUERDO',
                     
