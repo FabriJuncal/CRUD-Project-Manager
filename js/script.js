@@ -320,14 +320,6 @@ function accionesTareas(e){ // Cambiamos el estado  de las Tareas o las Eliminam
           }).then((result) => {
             if (result.value) {
 
-                var tareaEliminar = e.target.parentElement.parentElement
-
-                // Borrar del HTML
-                tareaEliminar.remove();
-            
-                // Borrar de la BD
-                eliminarTareaBD(tareaEliminar); 
-                
                 // Alerta de Eliminado
                 Swal.fire({
                 title: '¡Eliminado!',
@@ -335,6 +327,16 @@ function accionesTareas(e){ // Cambiamos el estado  de las Tareas o las Eliminam
                 type: 'success',
                 confirmButtonText: 'DE ACUERDO',
                 
+                }).then(resultado => { // Redireccionamos al archivo index.php
+                    if(resultado.value){
+                        var tareaEliminar = e.target.parentElement.parentElement
+
+                        // Borrar del HTML
+                        tareaEliminar.remove();
+                    
+                        // Borrar de la BD
+                        eliminarTareaBD(tareaEliminar);
+                    }
                 })
 
                 
@@ -383,7 +385,7 @@ function eliminarTareaBD(tarea){ // Eliminamos la Tarea de la Base de Datos medi
                 setTimeout(() => {
                     // Actualizamos la Barra de Progreso
                     barraProgreso();
-                },1700)
+                },900)
               
             }
 
