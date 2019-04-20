@@ -15,8 +15,8 @@
     <!-- Boton para Eliminar el Proyecto -->
     <div class="accionesProyecto">
     <div class="boton-acciones-proyecto">
-            <i class="boton btn-proyecto fas fa-edit"></i>
-            <i class="boton btn-proyecto fas fa-trash"></i>
+            <a href="#"><i class="boton btn-proyecto fas fa-edit" id="btn-modificar-proyecto"></i></a>
+            <a href="#"><i class="boton btn-proyecto fas fa-trash" id="btn-eliminar-proyecto"></i></a>
     </div>
     </div>
 

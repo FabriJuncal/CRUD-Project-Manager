@@ -15,12 +15,17 @@ function eventListeners(){ // Funcion para agregar los Eventos con sus Funciones
     //Boton para Crer Proyectos
     document.querySelector('.crear-proyecto a').addEventListener('click', nuevoProyecto);
 
+    //Boton para Eliminar Proyectos
+    document.querySelector('#btn-eliminar-proyecto').addEventListener('click', accionesProyecto);
+
     //Boton para Agregar una Tarea a un Proyecto
     document.querySelector('.nueva-tarea').addEventListener('click', agregarTarea);
 
     // Botones para las Acciones de las Tareas
     document.querySelector('.listado-pendientes').addEventListener('click', accionesTareas);
 }
+
+/*** PROYECTOS ***/
 
 function nuevoProyecto(e){ // Creamos el evento para crear un Nuevo Proyecto y lo mostramos en el Frontend
     e.preventDefault(); // Quitamos el evento predeterminado
@@ -112,6 +117,79 @@ function guardarProyectoBD(nombreProyecto){ // Mediante AJAX Guardamos el Proyec
 
     
 }
+
+function accionesProyecto(e){ // Mediante AJAX Eliminamos el Proyecto de la Base de Datos y del HTML
+    e.preventDefault();
+
+    // Obtenemos el valor del ID del proyecto enviado por GET
+    id_proyecto = obtenerValorURL('id_proyecto');
+    if(id_proyecto != ''){
+        // Alerta pregunta si se desea Eliminar
+        Swal.fire({
+            title: '¿Esta seguro?',
+            text: "¡No podrás revertir esto!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '¡Si, bórralo!',
+            cancelButtonText: 'Cancelar'
+          }).then((result) => {
+            if (result.value) {
+
+                // Hacemos referencia al nodo con el Nombre del Proyecto
+                nodoProyecto = document.querySelector(`a[href*="index.php?id_proyecto=${id_proyecto}"]`);
+                // Eliminamos el nodo con el Nombre del Proyecto del HTML
+                nodoProyecto.remove();
+                // Eliminamos el Proyecto de la Base de Datos
+                eliminarProyectoBD(id_proyecto);
+                console.log(nodoProyecto);
+                
+                // Alerta de Eliminado
+                Swal.fire({
+                title: '¡Eliminado!',
+                text: "Su archivo ha sido eliminado.",
+                type: 'success',
+                confirmButtonText: 'DE ACUERDO',
+                
+                }).then(resultado => { // Redireccionamos al archivo index.php
+                    if(resultado.value){
+                        window.location.href = 'index.php';
+                    }
+                })
+
+                
+            }
+
+
+          })  
+    }
+
+}
+
+function eliminarProyectoBD(id_proyecto){
+
+    //1) Creamos el Objeto AJAX
+    xhr = new XMLHttpRequest();
+
+    //2) Creamos el FormData para enviar por AJAX
+    var datos = new FormData();
+        datos.append('id_proyecto', id_proyecto);
+        datos.append('accion', 'eliminar');
+
+    //3) Abrimos la Conezion
+    xhr.open('POST', 'inc/modelos/modelo-proyecto.php');
+
+    //4) Recibimos los datos del servidor
+    xhr.onload = function(){
+        console.log(JSON.parse(xhr.responseText));
+    }
+
+    //5) Enviamos la peticion
+    xhr.send(datos);
+}
+
+/*** TAREAS ***/
 
 function agregarTarea(e){ // Inyectamos la Tarea al HTML para mostrar la tarea recien creada sin tener la necesidad de recargar
 
@@ -242,6 +320,14 @@ function accionesTareas(e){ // Cambiamos el estado  de las Tareas o las Eliminam
           }).then((result) => {
             if (result.value) {
 
+                var tareaEliminar = e.target.parentElement.parentElement
+
+                // Borrar del HTML
+                tareaEliminar.remove();
+            
+                // Borrar de la BD
+                eliminarTareaBD(tareaEliminar); 
+                
                 // Alerta de Eliminado
                 Swal.fire({
                 title: '¡Eliminado!',
@@ -254,14 +340,7 @@ function accionesTareas(e){ // Cambiamos el estado  de las Tareas o las Eliminam
                 
             }
 
-            var tareaEliminar = e.target.parentElement.parentElement
 
-            // Borrar del HTML
-            tareaEliminar.remove();
-        
-            // Borrar de la BD
-            eliminarTareaBD(tareaEliminar); 
-            
           })  
           
     }
@@ -280,7 +359,7 @@ function eliminarTareaBD(tarea){ // Eliminamos la Tarea de la Base de Datos medi
     datos.append('accion', 'eliminar');
   
 
-    // Abrimos la conexion
+    //3) Abrimos la conexion
     xhr.open('POST', 'inc/modelos/modelo-tarea.php', true);
     
     //4) Recibimos los datos del servidor
@@ -292,7 +371,7 @@ function eliminarTareaBD(tarea){ // Eliminamos la Tarea de la Base de Datos medi
             var listaTareasRestantes = document.querySelectorAll('li.tarea');
 
             if(listaTareasRestantes.length === 0){ // En el caso que no halla Tareas Restantes, se muestra el siguiente mensaje de Lista Vacia
-
+                
                 // Si el Proyecto no contiene Tareas, Eliminamos el nodo de la Barra de Progreso
                 barraProgreso();
 
@@ -351,7 +430,7 @@ function barraProgreso(){ // Verificamos la lista de Tareas y segun halla o no T
     var listaTareasRestantes = document.querySelectorAll('li.tarea');
 
     if(listaTareasRestantes.length === 0){ // En el caso que no halla Tareas Restantes, se muestra el siguiente mensaje de Lista Vacia
-
+        console.log('Mostramos mensaje');
         if( document.querySelector('span.barra-progreso')){ // En el caso que existe el Nodo
         // Si el Proyecto no contiene Tareas, Eliminamos el nodo de la Barra de Progreso
         document.querySelector('span.barra-progreso').remove()
@@ -365,7 +444,7 @@ function barraProgreso(){ // Verificamos la lista de Tareas y segun halla o no T
 
 
         if(!document.querySelector('span.barra-progreso')){ // En el caso que no Exista el NODO
-
+            console.log('NO Mostramos mensaje');
             // Creamos el Nodo de la Barra de Progreso
             var BarraProgreso = document.createElement('span');
             BarraProgreso.classList.add('barra-progreso');
@@ -411,12 +490,19 @@ function barraProgreso(){ // Verificamos la lista de Tareas y segun halla o no T
         
         }
 
-        if(document.querySelector('.lista-vacia')){ // En el caso que exista el Nodo
+        if(document.querySelector('.mnj-sin-tareas')){ // En el caso que exista el Nodo
             //Removemos el mensaje de lista vacia
-            document.querySelector('.lista-vacia').remove();
+            document.querySelector('.mnj-sin-tareas').remove();
 
         }
         
     }
 
+}
+
+function obtenerValorURL(name) { // Obtenemos el valores de la URL. En este caso obtenemos el valor del ID del proyecto
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+    results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }

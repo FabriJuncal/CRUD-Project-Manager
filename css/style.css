@@ -288,3 +288,9 @@ div.listado-pendientes h2{
     border-radius: 55%;
     margin: auto 2px;
 }
+
+.boton-acciones-proyecto a{
+    color: #455A64;
+    text-decoration: none;
+}
+
