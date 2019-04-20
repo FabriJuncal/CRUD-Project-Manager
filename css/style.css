@@ -10,6 +10,11 @@ body {
     font-family: 'Lato', sans-serif;
     min-height: 100%;
 }
+
+h1{
+    margin: -15px 0px 0.67em 0;
+}
+
 .swal2-shown aside {
     height: 100vh;
 }
@@ -264,4 +269,22 @@ div.listado-pendientes h2{
 .mnj-sin-tareas{
     font-size: 1.5rem;
     text-align: center;
+}
+
+/* Boton para Eliminar Proyecto */
+
+.accionesProyecto{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.boton-acciones-proyecto{
+    display: flex;
+    font-size: 1.3rem;
+
+}
+
+.btn-proyecto{
+    border-radius: 55%;
+    margin: auto 2px;
 }

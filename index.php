@@ -11,6 +11,15 @@
     <?php include 'inc/templates/sidebar.php'; // Importamos la barra izquierda ?>
 
     <main class="contenido-principal">
+
+    <!-- Boton para Eliminar el Proyecto -->
+    <div class="accionesProyecto">
+    <div class="boton-acciones-proyecto">
+            <i class="boton btn-proyecto fas fa-edit"></i>
+            <i class="boton btn-proyecto fas fa-trash"></i>
+    </div>
+    </div>
+
 <?php
     // Obtenemos el ID de la URL
     $id_proyecto = '';
