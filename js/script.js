@@ -16,13 +16,20 @@ function eventListeners(){ // Funcion para agregar los Eventos con sus Funciones
     document.querySelector('.crear-proyecto a').addEventListener('click', nuevoProyecto);
 
     //Boton para Eliminar Proyectos
-    document.querySelector('#btn-eliminar-proyecto').addEventListener('click', accionesProyecto);
+    if(document.querySelector('#btn-eliminar-proyecto')){
+        document.querySelector('#btn-eliminar-proyecto').addEventListener('click', accionesProyecto);
+    }
 
     //Boton para Agregar una Tarea a un Proyecto
-    document.querySelector('.nueva-tarea').addEventListener('click', agregarTarea);
+    if(document.querySelector('.nueva-tarea')){
+        document.querySelector('.nueva-tarea').addEventListener('click', agregarTarea);
+    }
 
     // Botones para las Acciones de las Tareas
-    document.querySelector('.listado-pendientes').addEventListener('click', accionesTareas);
+    if(document.querySelector('.listado-pendientes')){
+        document.querySelector('.listado-pendientes').addEventListener('click', accionesTareas);
+    }
+    
 }
 
 /*** PROYECTOS ***/
@@ -432,7 +439,7 @@ function barraProgreso(){ // Verificamos la lista de Tareas y segun halla o no T
     var listaTareasRestantes = document.querySelectorAll('li.tarea');
 
     if(listaTareasRestantes.length === 0){ // En el caso que no halla Tareas Restantes, se muestra el siguiente mensaje de Lista Vacia
-        console.log('Mostramos mensaje');
+
         if( document.querySelector('span.barra-progreso')){ // En el caso que existe el Nodo
         // Si el Proyecto no contiene Tareas, Eliminamos el nodo de la Barra de Progreso
         document.querySelector('span.barra-progreso').remove()
@@ -440,13 +447,15 @@ function barraProgreso(){ // Verificamos la lista de Tareas y segun halla o no T
 
 
         // Mostramos un mensaje que dice que no hay Tareas en el Proyecto
-        document.querySelector('.listado-pendientes ul').innerHTML = '<p class = "fuente-secundaria mnj-sin-tareas"> No hay tareas en este Proyecto </p>';
+        if(document.querySelector('.listado-pendientes ul')){
+            document.querySelector('.listado-pendientes ul').innerHTML = '<p class = "fuente-secundaria mnj-sin-tareas"> No hay tareas en este Proyecto </p>';
+        }
 
     }else { // En el caso que halla tareas en la lista
 
 
         if(!document.querySelector('span.barra-progreso')){ // En el caso que no Exista el NODO
-            console.log('NO Mostramos mensaje');
+
             // Creamos el Nodo de la Barra de Progreso
             var BarraProgreso = document.createElement('span');
             BarraProgreso.classList.add('barra-progreso');

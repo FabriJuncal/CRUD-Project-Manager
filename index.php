@@ -12,14 +12,6 @@
 
     <main class="contenido-principal">
 
-    <!-- Boton para Eliminar el Proyecto -->
-    <div class="accionesProyecto">
-    <div class="boton-acciones-proyecto">
-            <a href="#"><i class="boton btn-proyecto fas fa-edit" id="btn-modificar-proyecto"></i></a>
-            <a href="#"><i class="boton btn-proyecto fas fa-trash" id="btn-eliminar-proyecto"></i></a>
-    </div>
-    </div>
-
 <?php
     // Obtenemos el ID de la URL
     $id_proyecto = '';
@@ -27,6 +19,13 @@
         $id_proyecto = $_GET['id_proyecto'];
 
 ?>   
+            <!-- Botones para Modificar y Eliminar el Proyecto -->
+        <div class="accionesProyecto">
+            <div class="boton-acciones-proyecto">
+                    <a href="#"><i class="boton btn-proyecto fas fa-edit" id="btn-modificar-proyecto"></i></a>
+                    <a href="#"><i class="boton btn-proyecto fas fa-trash" id="btn-eliminar-proyecto"></i></a>
+            </div>
+        </div>
         <h1> Proyecto Actual: 
 <?php 
         $proyecto = obtenerNombreProyecto($id_proyecto);  
