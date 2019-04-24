@@ -13,12 +13,31 @@
                 if($proyectos){
 
                     foreach($proyectos as $proyecto){            ?>
+                        <a href="index.php?id_proyecto=<?php echo $proyecto['id']  ?>" id="proyecto:<?php echo $proyecto['id']  ?>">
+                            <li class="proyecto-sidebar">     
+                                <span class="nombre-proyecto"><?php echo $proyecto['nombre']?></span>
+                                <span class="cantidad-tareas">
+                                    <span class="cantidad-tareas-completadas">                                     
+<?php 
+                                        $totalTareas = obtenerTotalTareas($proyecto['id'], 1);  
+                                        foreach($totalTareas as $toltaTareasCompletadas){              
 
-                        <li>
-                            <a href="index.php?id_proyecto=<?php echo $proyecto['id']  ?>" id="proyecto:<?php echo $proyecto['id']  ?>">
-                                <?php echo $proyecto['nombre']  ?>
-                            </a>
-                        </li>
+                                            echo $toltaTareasCompletadas['totalTareas'];
+                                        }
+?>
+                                    </span>
+                                    <span class="cantidad-tareas-incompletas">
+ <?php 
+                                        $totalTareas = obtenerTotalTareas($proyecto['id'], 0);  
+                                        foreach($totalTareas as $toltaTareasIncompletas){              
+
+                                            echo $toltaTareasIncompletas['totalTareas'];
+                                        }
+ ?>                                       
+                                    </span>
+                                </span>
+                            </li>
+                        </a>
 
             <?php
                     }

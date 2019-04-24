@@ -15,6 +15,9 @@ function eventListeners(){ // Funcion para agregar los Eventos con sus Funciones
         barraProgreso();
     })
 
+    // Cerramos Sesion
+    document.querySelector('#cerrar-sesion').addEventListener('click', cerrarSession);
+
     //Boton para Crer Proyectos
     document.querySelector('.crear-proyecto a').addEventListener('click', nuevoProyecto);
 
@@ -207,6 +210,8 @@ function cambiarNombreProyecto(e){ // Modificamos el Nombre del Proyecto del HTM
 
         e.preventDefault(); // Quitamos el evento predeterminado
 
+        // Declaramos a una variable, el nombre Actual del Proyecto
+        nombreActualProyecto = document.querySelector(`li a[href*="index.php?id_proyecto=${id_proyecto}"]`).innerText;
 
         // Agregamos el nombre actual del proyecto en una variable
         var nombreProyeto = document.querySelector('.nombreProyecto').innerText;
@@ -221,36 +226,58 @@ function cambiarNombreProyecto(e){ // Modificamos el Nombre del Proyecto del HTM
             // Le asignamos a la variable "tecla" el valor asci de la tecla presionada
             var tecla = e.which || e.keycode;
             
-            if(tecla === 13){ // Si "tecla" es igual al valor 13, quiere decir que presionamos la tecla ENTER, ya que el codigo asci de ENTER es 13
+            if(tecla === 13){ // Si "tecla" es igual al valor 13, quiere decir que presionamos la tecla ENTER, ya que el codigo ascii de ENTER es 13
                 
+
                 // Verificamos que exista el Nodo Mensionado
-                if (document.querySelector('input#nombreProyecto') != null) {
-                    // Le declaramos a una variable el valor que contiene el INPUT en el momento que presionamos la tecla ENTER
-                    nuevoNombreProyecto = document.querySelector('input#nombreProyecto').value;
-                    inputNombreProyecto.innerHTML = `${nuevoNombreProyecto}`;
-                    
-                     // Hacemos referencia al nodo con el Nombre del Proyecto
-                    nodoProyecto = document.querySelector(`li a[href*="index.php?id_proyecto=${id_proyecto}"]`);
-                    console.log(nuevoNombreProyecto);
+                if(document.querySelector('input#nombreProyecto')){
+                    // Verificamos que el valor del Nodo sea Diferente de vacio
+                    if (document.querySelector('input#nombreProyecto').value != "" ) {
 
-                    // Cambiamos el Nombre del Proyecto de la Barra Lateral
-                    nodoProyecto.innerHTML = nuevoNombreProyecto;
+                        // Le declaramos a una variable el valor que contiene el INPUT en el momento que presionamos la tecla ENTER
+                        nuevoNombreProyecto = document.querySelector('input#nombreProyecto').value;
+                        inputNombreProyecto.innerHTML = `${nuevoNombreProyecto}`;
+                        
+                        // Hacemos referencia al nodo con el Nombre del Proyecto
+                        nodoProyecto = document.querySelector(`li a[href*="index.php?id_proyecto=${id_proyecto}"]`);
+                        console.log(nuevoNombreProyecto);
 
-                    modificarNombreProyectoBD(nuevoNombreProyecto);
+                        // Cambiamos el Nombre del Proyecto de la Barra Lateral
+                        nodoProyecto.innerHTML = nuevoNombreProyecto;
 
+                        modificarNombreProyectoBD(nuevoNombreProyecto);
+
+                        Swal.fire({
+                            position: 'center',
+                            type: 'success',
+                            title: 'Se cambio el nombre del proyecto',
+                            showConfirmButton: false,
+                            timer: 1500
+                          })
+
+                    }else{
+                        // Si el valor del campo esta vacio, el nombre del proyecto queda como estaba
+                        inputNombreProyecto.innerHTML = `${nombreActualProyecto}`;
+                        console.log(nombreActualProyecto);
+                    }
                 }
+            }else if(tecla === 27){
+                console.log('Se presiono ESCAPE');
+                // Si el valor del campo esta vacio, el nombre del proyecto queda como estaba
+                inputNombreProyecto.innerHTML = `${nombreActualProyecto}`;
+                console.log(nombreActualProyecto);
             }      
         })
 }
 
-function modificarNombreProyectoBD(nuebroNombreProyecto){ // Mediante AJAX Modificamos el Nombre del Proyecto de la Base de Datos
+function modificarNombreProyectoBD(nuevoNombreProyecto){ // Mediante AJAX Modificamos el Nombre del Proyecto de la Base de Datos
     //1) Creamos el Objeto AJAX
     xhr = new XMLHttpRequest();
 
     //2) Creamos el FormData para enviar por AJAX
     var datos = new FormData();
         datos.append('id_proyecto', id_proyecto);
-        datos.append('proyecto', nuebroNombreProyecto);
+        datos.append('proyecto', nuevoNombreProyecto);
         datos.append('accion', 'modificar');
 
     //3) Abrimos la Conezion
@@ -258,8 +285,7 @@ function modificarNombreProyectoBD(nuebroNombreProyecto){ // Mediante AJAX Modif
 
     //4) Recibimos los datos del servidor
     xhr.onload = function(){
-        console.log(xhr.responseText);
-        //console.log(JSON.parse(xhr.responseText));
+        console.log(JSON.parse(xhr.responseText));
     }
 
     //5) Enviamos la peticion
@@ -282,6 +308,9 @@ function agregarTarea(e){ // Inyectamos la Tarea al HTML para mostrar la tarea r
             type: 'error'
         })
     }else{ // En el caso que la Tarea contenga un texto
+
+        // Cambiamos de valor del Total de Tareas Completas e Incompletas de la Barra Lateral
+        tareasBarraLateral('creoTarea');
 
         // Creamos el objeto AJAX
         var xhr = new XMLHttpRequest();
@@ -407,9 +436,11 @@ function accionesTareas(e){ // Cambiamos el estado  de las Tareas o las Eliminam
                 }).then(resultado => { // Redireccionamos al archivo index.php
                     if(resultado.value){
                         var tareaEliminar = e.target.parentElement.parentElement
-
+                        console.log(tareaEliminar);
                         // Borrar del HTML
                         tareaEliminar.remove();
+
+                        tareasBarraLateral('eliminoTarea', tareaEliminar);
                     
                         // Borrar de la BD
                         eliminarTareaBD(tareaEliminar);
@@ -427,7 +458,11 @@ function accionesTareas(e){ // Cambiamos el estado  de las Tareas o las Eliminam
 }
 
 function eliminarTareaBD(tarea){ // Eliminamos la Tarea de la Base de Datos mediante AJAX
+   
     var idTarea = tarea.id.split(':');
+
+    // Cambiamos de valor del Total de Tareas Completas e Incompletas de la Barra Lateral
+    // tareasBarraLateral('eliminoTarea', idTarea[1]);
 
     //1) Creamos el objeto AJAX
     var xhr = new XMLHttpRequest();
@@ -436,7 +471,6 @@ function eliminarTareaBD(tarea){ // Eliminamos la Tarea de la Base de Datos medi
     var datos = new FormData();
     datos.append('id_tarea', idTarea[1]);
     datos.append('accion', 'eliminar');
-  
 
     //3) Abrimos la conexion
     xhr.open('POST', 'inc/modelos/modelo-tarea.php', true);
@@ -477,6 +511,9 @@ function eliminarTareaBD(tarea){ // Eliminamos la Tarea de la Base de Datos medi
 function cambiarEstadoTarea(tarea, estado){ // Cambiamos el los valores de la Base de Datos que hacen referencia al Estado de la Tarea
     var idTarea = tarea.parentElement.parentElement.id.split(':');
 
+    // Cambiamos de valor del Total de Tareas Completas e Incompletas de la Barra Lateral
+    tareasBarraLateral('cambioEstadoTarea',estado);
+
     //1) Creamos el objeto AJAX
     var xhr = new XMLHttpRequest();
 
@@ -502,6 +539,7 @@ function cambiarEstadoTarea(tarea, estado){ // Cambiamos el los valores de la Ba
     //5) Enviamos la peticion
     xhr.send(datos);
 }
+
 
 function barraProgreso(){ // Verificamos la lista de Tareas y segun halla o no Tareas  Mostramos u Ocultamos la Barra de Progreso
 
@@ -581,9 +619,74 @@ function barraProgreso(){ // Verificamos la lista de Tareas y segun halla o no T
 
 }
 
+function tareasBarraLateral(accion, estado = null, nodoTarea = null){
+    // Cambiamos de valor del Total de Tareas Completas e Incompletas de la Barra Lateral
+
+    // Total Tareas Completas
+    nodoTareasCompletas = document.querySelector(`a[href*="index.php?id_proyecto=${id_proyecto}"] li .cantidad-tareas-completadas`);
+    tareasCompletadas = parseInt(nodoTareasCompletas.innerText);
+
+    // Total Tareas Incompletas
+    nodoTareasIncompletas = document.querySelector(`a[href*="index.php?id_proyecto=${id_proyecto}"] li .cantidad-tareas-incompletas`);
+    tareasIncompletadas = parseInt(nodoTareasIncompletas.innerText); 
+
+    if(accion === 'cambioEstadoTarea'){ // En el caso que se halla Cambiado el estado de una Tarea
+
+        if(estado === 1){ // En el caso que el estado de la Tarea sea Completado
+
+            totalTareasCompletadas = tareasCompletadas + 1;
+            totalTareasIncompletadas = tareasIncompletadas -1
+
+            nodoTareasCompletas.innerHTML = `${totalTareasCompletadas}`;
+            nodoTareasIncompletas.innerHTML = `${totalTareasIncompletadas}`;
+
+        }else if(estado === 0){ // En el caso que el estado de la Tarea sea Incompleto
+
+            totalTareasIncompletadas = tareasIncompletadas + 1;
+            totalTareasCompletadas = tareasCompletadas - 1;
+
+            nodoTareasIncompletas.innerHTML = `${totalTareasIncompletadas}`;
+            nodoTareasCompletas.innerHTML = `${totalTareasCompletadas}`;
+        }
+
+    }else if(accion === 'creoTarea'){ // En el caso que se halla Creado una Tarea
+        totalTareasIncompletadas = tareasIncompletadas + 1;
+        nodoTareasIncompletas.innerHTML = `${totalTareasIncompletadas}`;
+
+    }else if(accion === 'eliminoTarea'){ // En el caso que se halla Eliminado una Tarea
+
+        var idTarea = nodoTarea.id.split(':');
+        console.log(idTarea);
+        // document.querySelector(`li[id*="tarea:${idTarea}"] .acciones i`).classList.contains('completo')
+    
+    }
+}
+
+/*** OTRAS FUNCIONES ***/
+
+function cerrarSession(){ // Mostramos Aviso de Sesion Cerrada
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000
+      });
+      
+      Toast.fire({
+        type: 'error',
+        title: '¡Sesion cerrada!'
+      }).then(resultado =>{ // Redireccionamos al proyecto recien creado
+        
+            window.location.href = 'login.php?cerrar_sesion=true';
+        
+    });
+     
+}
+
 function obtenerValorURL(name) { // Obtenemos el valores de la URL. En este caso obtenemos el valor del ID del proyecto
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
     results = regex.exec(location.search);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
+

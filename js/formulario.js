@@ -2,7 +2,9 @@ eventListeners();
 
 // Funcion con todos los eventos
 function eventListeners(){
+    // Validamos el Inicio de Sesion
     document.querySelector('#formulario').addEventListener('submit', validarRegistro);
+    
 }
 
 // Validamos el registro de iniciar seccion

@@ -11,6 +11,10 @@ body {
     min-height: 100%;
 }
 
+a{
+    cursor: pointer;
+}
+
 h1{
     margin: -15px 0px 0.67em 0;
 }
@@ -103,6 +107,9 @@ body.index {
     justify-content: space-between;
     align-items: center;
 }
+
+
+
 .barra h1 {
     color: white;
     margin:0;
@@ -111,6 +118,10 @@ body.index {
 .barra a {
     color: white;
     text-decoration: none;
+}
+
+.barra a:hover{
+    color: #FDD835;
 }
 
 /*** sidebar**/
@@ -122,7 +133,6 @@ body.index {
 }
 .panel {
     padding: 1rem;
-    margin: 1rem;
 }
 .panel a {
     color: white;
@@ -150,10 +160,40 @@ body.index {
     margin: 0;
 }
 .lista-proyectos ul li {
-    margin-bottom: 1rem;
+    padding: 10px 17px;
+    cursor: pointer;
 }
-.lista-proyectos ul li a:hover {
+.lista-proyectos ul li:hover {
     color: #FDD835;
+    background: #222d3236;
+}
+
+.proyecto-sidebar{
+    display: flex;
+    justify-content: space-between;
+}
+
+.cantidad-tareas{
+    white-space: nowrap;
+}
+
+.cantidad-tareas-completadas{
+    background-color: #00B762;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    border-radius: .25em;
+    line-height: 1;
+    margin-right: 0.5em;
+}
+
+.cantidad-tareas-incompletas{
+    background-color: #337ab7;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    border-radius: .25em;
+    line-height: 1;
 }
 
 

@@ -85,3 +85,16 @@ function obtenerTareaProyecto($id = NULL){ // Obtenemos las Tareas de un Proyect
   }
 }
 
+function obtenerTotalTareas($id = NULL, $estado){ // Obtenemos las Tareas de un Proyecto en especifico
+  include 'conexion.php'; // Obtenemos la conexion
+
+  try {
+    // Obtenemos todos las Tareas de un Proyecto en especifico 
+  return $conn->query("SELECT COUNT(*) AS 'totalTareas' FROM tareas WHERE id_proyecto = {$id} AND estado = {$estado}");
+
+  } catch (Exception $e) { // En caso de ERROR lo Imprimimos
+    echo 'Error!: ' . $e->getMessage();
+    return false;
+  }
+}
+
