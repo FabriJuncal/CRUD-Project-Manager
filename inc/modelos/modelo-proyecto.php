@@ -8,8 +8,6 @@ if(isset($_POST['id_proyecto'])){
     $id_proyecto = (int) $_POST['id_proyecto'];
 }
 
-$id_proyecto = $_POST['id_proyecto'];
-
 $accion = $_POST['accion'];
 
 if($accion === 'crear'){ //CODIGO PARA CREAR LOS PROYECTOS

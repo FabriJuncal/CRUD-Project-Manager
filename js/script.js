@@ -97,7 +97,7 @@ function guardarProyectoBD(nombreProyecto){ // Mediante AJAX Guardamos el Proyec
                         var nuevoProyecto = document.createElement('li');
 
                         nuevoProyecto.innerHTML = `
-                            <a href="index.php?id_proyecto=${id_proyecto}" id=proyecto:${id_proyecto}>
+                            <a href="index.php?id_proyecto=${id_proyecto}" id="proyecto:${id_proyecto}">
                                 ${proyecto}
                             </a>
                         `;
@@ -181,7 +181,7 @@ function accionesProyecto(e){ // Mediante AJAX Eliminamos el Proyecto de la Base
 
 }
 
-function eliminarProyectoBD(id_proyecto){
+function eliminarProyectoBD(id_proyecto){ // Mediante AJAX Eliminamos el Proyecto de la Base de Datos
 
     //1) Creamos el Objeto AJAX
     xhr = new XMLHttpRequest();
