@@ -7,6 +7,7 @@ if(isset($_POST['proyecto'])){
 if(isset($_POST['id_proyecto'])){
     $id_proyecto = (int) $_POST['id_proyecto'];
 }
+
 $id_proyecto = $_POST['id_proyecto'];
 
 $accion = $_POST['accion'];
@@ -112,6 +113,52 @@ if($accion === 'eliminar'){ // CODIGO PARA ELIMINAR LOS PROYECTOS
     }
 
 }
+
+if($accion === 'modificar'){
+
+    //Importamos la conexion
+    include '../funciones/conexion.php';
+
+    try{
+
+        $stmt = $conn->prepare("UPDATE proyectos SET nombre = ? WHERE id = ?");
+                $stmt->bind_param("si", $proyecto, $id_proyecto);
+                $stmt->execute();
+
+        // $respuesta = array(                      }
+        //     'respuesta' => $stmt->error_list,    }      =>  ESTE CODIGO SIRVE PARA DEBUGEAR CUANDO OBTENEMOS UN ERROR        
+        //     'error' => $stmt->error              }      =>  AL REALIZAR UNA CONSULTA A LA BASE DE DATOS
+        // );
+
+        
+        if($stmt->affected_rows > 0){ // Condicional en el caso que alguna fila halla sido afectada por la consulta
+
+            $respuesta = array(
+                'respuesta' => 'correcto',
+                
+            );
+
+        }else{
+            $respuesta = array( // Condicional en el caso que ninguna fila halla sido afectada por la consulta
+                'respuesta' => 'error'
+            );
+        }
+
+
+        // Cerramos las conexiones
+        $stmt->close();
+        $conn->close();
+
+       
+    }catch(Exception $e){
+        // En caso de error , tomar la excepcion
+        $respuesta = array(
+            'error' => $e->getMessage()
+        );
+    }
+
+}
+
 
 // Retornamos el valor mediante AJAX
 echo json_encode($respuesta);

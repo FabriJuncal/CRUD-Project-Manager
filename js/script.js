@@ -4,6 +4,9 @@ eventListeners();
 // Lista de Proyectos
 var listaProyectos = document.querySelector('ul#proyectos');
 
+// Obtenemos el valor del ID del proyecto enviado por GET
+var id_proyecto = obtenerValorURL('id_proyecto');
+
 function eventListeners(){ // Funcion para agregar los Eventos con sus Funciones
 
     // Se ejecuta la siguiente funcion cuando se carga la Pagina
@@ -18,6 +21,11 @@ function eventListeners(){ // Funcion para agregar los Eventos con sus Funciones
     //Boton para Eliminar Proyectos
     if(document.querySelector('#btn-eliminar-proyecto')){
         document.querySelector('#btn-eliminar-proyecto').addEventListener('click', accionesProyecto);
+    }
+
+    //Boton para modificar Proyectos
+    if( document.querySelector('#btn-modificar-proyecto')){
+        document.querySelector('#btn-modificar-proyecto').addEventListener('click', cambiarNombreProyecto)
     }
 
     //Boton para Agregar una Tarea a un Proyecto
@@ -128,8 +136,7 @@ function guardarProyectoBD(nombreProyecto){ // Mediante AJAX Guardamos el Proyec
 function accionesProyecto(e){ // Mediante AJAX Eliminamos el Proyecto de la Base de Datos y del HTML
     e.preventDefault();
 
-    // Obtenemos el valor del ID del proyecto enviado por GET
-    id_proyecto = obtenerValorURL('id_proyecto');
+    
     if(id_proyecto != ''){
         // Alerta pregunta si se desea Eliminar
         Swal.fire({
@@ -190,6 +197,69 @@ function eliminarProyectoBD(id_proyecto){
     //4) Recibimos los datos del servidor
     xhr.onload = function(){
         console.log(JSON.parse(xhr.responseText));
+    }
+
+    //5) Enviamos la peticion
+    xhr.send(datos);
+}
+
+function cambiarNombreProyecto(e){ // Modificamos el Nombre del Proyecto del HTML
+
+        e.preventDefault(); // Quitamos el evento predeterminado
+
+
+        // Agregamos el nombre actual del proyecto en una variable
+        var nombreProyeto = document.querySelector('.nombreProyecto').innerText;
+
+        // Creamos el input y como valor le pasamos el Nombre Actual del Proyecto
+        inputNombreProyecto = document.querySelector('.nombreProyecto');
+        inputNombreProyecto.innerHTML = `<input type="text" id="nombreProyecto" value="${nombreProyeto}">`;
+        
+            // Al presionar una tecla se ejecuta la siguiente funcion
+            inputNombreProyecto.addEventListener('keypress', function(e){
+        
+            // Le asignamos a la variable "tecla" el valor asci de la tecla presionada
+            var tecla = e.which || e.keycode;
+            
+            if(tecla === 13){ // Si "tecla" es igual al valor 13, quiere decir que presionamos la tecla ENTER, ya que el codigo asci de ENTER es 13
+                
+                // Verificamos que exista el Nodo Mensionado
+                if (document.querySelector('input#nombreProyecto') != null) {
+                    // Le declaramos a una variable el valor que contiene el INPUT en el momento que presionamos la tecla ENTER
+                    nuevoNombreProyecto = document.querySelector('input#nombreProyecto').value;
+                    inputNombreProyecto.innerHTML = `${nuevoNombreProyecto}`;
+                    
+                     // Hacemos referencia al nodo con el Nombre del Proyecto
+                    nodoProyecto = document.querySelector(`li a[href*="index.php?id_proyecto=${id_proyecto}"]`);
+                    console.log(nuevoNombreProyecto);
+
+                    // Cambiamos el Nombre del Proyecto de la Barra Lateral
+                    nodoProyecto.innerHTML = nuevoNombreProyecto;
+
+                    modificarNombreProyectoBD(nuevoNombreProyecto);
+
+                }
+            }      
+        })
+}
+
+function modificarNombreProyectoBD(nuebroNombreProyecto){ // Mediante AJAX Modificamos el Nombre del Proyecto de la Base de Datos
+    //1) Creamos el Objeto AJAX
+    xhr = new XMLHttpRequest();
+
+    //2) Creamos el FormData para enviar por AJAX
+    var datos = new FormData();
+        datos.append('id_proyecto', id_proyecto);
+        datos.append('proyecto', nuebroNombreProyecto);
+        datos.append('accion', 'modificar');
+
+    //3) Abrimos la Conezion
+    xhr.open('POST', 'inc/modelos/modelo-proyecto.php');
+
+    //4) Recibimos los datos del servidor
+    xhr.onload = function(){
+        console.log(xhr.responseText);
+        //console.log(JSON.parse(xhr.responseText));
     }
 
     //5) Enviamos la peticion

@@ -26,12 +26,12 @@
                     <a href="#"><i class="boton btn-proyecto fas fa-trash" id="btn-eliminar-proyecto"></i></a>
             </div>
         </div>
-        <h1> Proyecto Actual: 
+        <h1 id="proyecto-actual"> Proyecto Actual: 
 <?php 
         $proyecto = obtenerNombreProyecto($id_proyecto);  
         foreach($proyecto as $nombre){              
 ?>
-            <span><?php echo $nombre['nombre']; ?></span>
+            <span class="nombreProyecto"><?php echo $nombre['nombre']; ?></span>
 
 <?php    }
 ?>
