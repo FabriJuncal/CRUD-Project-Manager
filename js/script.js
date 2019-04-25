@@ -1,11 +1,12 @@
 
 eventListeners();
 
-// Lista de Proyectos
+// Obtenemos el Nodo de la Lista de Proyectos
 var listaProyectos = document.querySelector('ul#proyectos');
 
 // Obtenemos el valor del ID del proyecto enviado por GET
 var id_proyecto = obtenerValorURL('id_proyecto');
+
 
 function eventListeners(){ // Funcion para agregar los Eventos con sus Funciones
 
@@ -156,16 +157,18 @@ function accionesProyecto(e){ // Mediante AJAX Eliminamos el Proyecto de la Base
 
                 // Hacemos referencia al nodo con el Nombre del Proyecto
                 nodoProyecto = document.querySelector(`a[href*="index.php?id_proyecto=${id_proyecto}"]`);
+
                 // Eliminamos el nodo con el Nombre del Proyecto del HTML
                 nodoProyecto.remove();
+
                 // Eliminamos el Proyecto de la Base de Datos
                 eliminarProyectoBD(id_proyecto);
-                console.log(nodoProyecto);
+
                 
                 // Alerta de Eliminado
                 Swal.fire({
                 title: '¡Eliminado!',
-                text: "Su archivo ha sido eliminado.",
+                text: "Se ha eliminado el Proyecto.",
                 type: 'success',
                 confirmButtonText: 'DE ACUERDO',
                 
@@ -211,7 +214,7 @@ function cambiarNombreProyecto(e){ // Modificamos el Nombre del Proyecto del HTM
         e.preventDefault(); // Quitamos el evento predeterminado
 
         // Declaramos a una variable, el nombre Actual del Proyecto
-        nombreActualProyecto = document.querySelector(`li a[href*="index.php?id_proyecto=${id_proyecto}"]`).innerText;
+        nombreActualProyecto = document.querySelector(`a[href*="index.php?id_proyecto=${id_proyecto}"] .nombre-proyecto`).innerText;
 
         // Agregamos el nombre actual del proyecto en una variable
         var nombreProyeto = document.querySelector('.nombreProyecto').innerText;
@@ -239,8 +242,7 @@ function cambiarNombreProyecto(e){ // Modificamos el Nombre del Proyecto del HTM
                         inputNombreProyecto.innerHTML = `${nuevoNombreProyecto}`;
                         
                         // Hacemos referencia al nodo con el Nombre del Proyecto
-                        nodoProyecto = document.querySelector(`li a[href*="index.php?id_proyecto=${id_proyecto}"]`);
-                        console.log(nuevoNombreProyecto);
+                        nodoProyecto = document.querySelector(`a[href*="index.php?id_proyecto=${id_proyecto}"] .nombre-proyecto`);
 
                         // Cambiamos el Nombre del Proyecto de la Barra Lateral
                         nodoProyecto.innerHTML = nuevoNombreProyecto;
@@ -258,14 +260,17 @@ function cambiarNombreProyecto(e){ // Modificamos el Nombre del Proyecto del HTM
                     }else{
                         // Si el valor del campo esta vacio, el nombre del proyecto queda como estaba
                         inputNombreProyecto.innerHTML = `${nombreActualProyecto}`;
-                        console.log(nombreActualProyecto);
+
                     }
                 }
             }else if(tecla === 27){
-                console.log('Se presiono ESCAPE');
-                // Si el valor del campo esta vacio, el nombre del proyecto queda como estaba
-                inputNombreProyecto.innerHTML = `${nombreActualProyecto}`;
-                console.log(nombreActualProyecto);
+
+                // FALTA CANCELAR EL CAMBIO DE NOMBRE DEL PROYECTO
+
+                // console.log('Se presiono ESCAPE');
+                // // Si el valor del campo esta vacio, el nombre del proyecto queda como estaba
+                // inputNombreProyecto.innerHTML = `${nombreActualProyecto}`;
+                // console.log(nombreActualProyecto);
             }      
         })
 }
@@ -308,9 +313,6 @@ function agregarTarea(e){ // Inyectamos la Tarea al HTML para mostrar la tarea r
             type: 'error'
         })
     }else{ // En el caso que la Tarea contenga un texto
-
-        // Cambiamos de valor del Total de Tareas Completas e Incompletas de la Barra Lateral
-        tareasBarraLateral('creoTarea');
 
         // Creamos el objeto AJAX
         var xhr = new XMLHttpRequest();
@@ -369,6 +371,9 @@ function agregarTarea(e){ // Inyectamos la Tarea al HTML para mostrar la tarea r
                          // Limpiamos el formulario
                          document.querySelector('.agregar-tarea').reset();
 
+                        // Actulizamos los Contadores de Tareas de la Barra Lateral
+                        tareasBarraLateral('creoTarea');
+
                          // En el caso que Existan Tareas Pendientes, Se mostrará y actualizará la Barra de Progreso
                          barraProgreso();
 
@@ -397,7 +402,7 @@ function agregarTarea(e){ // Inyectamos la Tarea al HTML para mostrar la tarea r
 
 function accionesTareas(e){ // Cambiamos el estado  de las Tareas o las Eliminamos
     e.preventDefault();
-
+    
     // .target: Con esta funcion podemos saber a que nodo HTML se le dio CLICK, se le conoce como DELEGATION
     if(e.target.classList.contains('fa-check-circle')){ // En el caso que hagamos CLICK en el ICONO DEL CIRCULO
 
@@ -412,7 +417,7 @@ function accionesTareas(e){ // Cambiamos el estado  de las Tareas o las Eliminam
         }
 
     }else if(e.target.classList.contains('fa-trash')){ // En el caso que hagamos CLICK en el ICONO DE BORRAR
-
+       
         // Alerta pregunta si se desea Eliminar
         Swal.fire({
             title: '¿Esta seguro?',
@@ -429,18 +434,22 @@ function accionesTareas(e){ // Cambiamos el estado  de las Tareas o las Eliminam
                 // Alerta de Eliminado
                 Swal.fire({
                 title: '¡Eliminado!',
-                text: "Su archivo ha sido eliminado.",
+                text: "Se ha eliminado la Tarea.",
                 type: 'success',
                 confirmButtonText: 'DE ACUERDO',
                 
                 }).then(resultado => { // Redireccionamos al archivo index.php
                     if(resultado.value){
+                        
                         var tareaEliminar = e.target.parentElement.parentElement
-                        console.log(tareaEliminar);
+                        
+                        var estadoTarea = e.target.parentElement.firstChild.nextElementSibling.classList.contains('completo');
+
                         // Borrar del HTML
                         tareaEliminar.remove();
 
-                        tareasBarraLateral('eliminoTarea', tareaEliminar);
+                        // Actulizamos los Contadores de Tareas de la Barra Lateral
+                        tareasBarraLateral('eliminoTarea', estadoTarea);
                     
                         // Borrar de la BD
                         eliminarTareaBD(tareaEliminar);
@@ -509,9 +518,10 @@ function eliminarTareaBD(tarea){ // Eliminamos la Tarea de la Base de Datos medi
 }
 
 function cambiarEstadoTarea(tarea, estado){ // Cambiamos el los valores de la Base de Datos que hacen referencia al Estado de la Tarea
+    
     var idTarea = tarea.parentElement.parentElement.id.split(':');
 
-    // Cambiamos de valor del Total de Tareas Completas e Incompletas de la Barra Lateral
+   // Actulizamos los Contadores de Tareas de la Barra Lateral
     tareasBarraLateral('cambioEstadoTarea',estado);
 
     //1) Creamos el objeto AJAX
@@ -619,7 +629,8 @@ function barraProgreso(){ // Verificamos la lista de Tareas y segun halla o no T
 
 }
 
-function tareasBarraLateral(accion, estado = null, nodoTarea = null){
+function tareasBarraLateral(accion, estado = null){ // Actualiza los Contadores de Tareas Completas e Incompletas de la Barra Lateral
+
     // Cambiamos de valor del Total de Tareas Completas e Incompletas de la Barra Lateral
 
     // Total Tareas Completas
@@ -655,10 +666,17 @@ function tareasBarraLateral(accion, estado = null, nodoTarea = null){
 
     }else if(accion === 'eliminoTarea'){ // En el caso que se halla Eliminado una Tarea
 
-        var idTarea = nodoTarea.id.split(':');
-        console.log(idTarea);
-        // document.querySelector(`li[id*="tarea:${idTarea}"] .acciones i`).classList.contains('completo')
-    
+        if(estado === true){
+
+            totalTareasCompletadas = tareasCompletadas - 1;
+            nodoTareasCompletas.innerHTML = `${totalTareasCompletadas}`;  
+
+        }else{
+
+            totalTareasIncompletadas = tareasIncompletadas - 1;
+            nodoTareasIncompletas.innerHTML = `${totalTareasIncompletadas}`;
+        }
+
     }
 }
 

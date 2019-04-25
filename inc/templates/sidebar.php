@@ -27,24 +27,24 @@
 ?>
                                     </span>
                                     <span class="cantidad-tareas-incompletas">
- <?php 
+<?php 
                                         $totalTareas = obtenerTotalTareas($proyecto['id'], 0);  
                                         foreach($totalTareas as $toltaTareasIncompletas){              
 
                                             echo $toltaTareasIncompletas['totalTareas'];
                                         }
- ?>                                       
+?>                                       
                                     </span>
                                 </span>
                             </li>
                         </a>
 
-            <?php
+<?php
                     }
                 }
                 
-            ?>
+?>
                 
             </ul>
         </div>
-    </aside>
+</aside>

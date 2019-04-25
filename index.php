@@ -8,7 +8,7 @@
 
 <div class="contenedor">
     
-    <?php include 'inc/templates/sidebar.php'; // Importamos la barra izquierda ?>
+<?php include 'inc/templates/sidebar.php'; // Importamos la barra izquierda ?>
 
     <main class="contenido-principal">
 
@@ -94,7 +94,7 @@
 
 ?>
        <div class="listado-pendientes">
-            <h2 class="fuente-secundaria">Selecciona un Proyecto</h2>
+            <h2 class="fuente-secundaria">Selecciona o Crea un Proyecto</h2>
        </div>
 
 <?php

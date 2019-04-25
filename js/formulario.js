@@ -58,6 +58,10 @@ function validarRegistro(e) {
                             title: '¡Usuario Creado!',
                             text: 'El usuario  se creo correctamente',
                             type: 'success'
+                        }).then(resultado => { // Redireccionamos al archivo index.php
+                            if(resultado.value){
+                                window.location.href = 'login.php';
+                            }
                         });
                      }else if(respuesta.tipo === 'login'){
                       // Plugin.js - Alerta con animacion - SweetAlert2
