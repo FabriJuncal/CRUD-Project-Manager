@@ -5,8 +5,11 @@ eventListeners();
 var listaProyectos = document.querySelector('ul#proyectos');
 
 // Obtenemos el valor del ID del proyecto enviado por GET
-var id_proyecto = obtenerValorURL('id_proyecto');
 
+//location : Obtiene la ruta actual
+//search: Obtiene los valores enviados por GET
+//split: Divide en un array el string a partir de lo que se le pase como parametro
+var id_proyecto = location.search.split('=')[1];
 
 function eventListeners(){ // Funcion para agregar los Eventos con sus Funciones
 
@@ -717,6 +720,8 @@ function tareasBarraLateral(accion, estado = null){ // Actualiza los Contadores 
 /*** OTRAS FUNCIONES ***/
 
 function cerrarSession(){ // Mostramos Aviso de Sesion Cerrada
+
+    // Plugin.js - Alerta con animacion - SweetAlert2
     const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
@@ -727,19 +732,14 @@ function cerrarSession(){ // Mostramos Aviso de Sesion Cerrada
       Toast.fire({
         type: 'error',
         title: '¡Sesion cerrada!'
-      }).then(resultado =>{ // Redireccionamos al proyecto recien creado
-        
+      }).then(resultado =>{ // Luego de mostrar la Alerta ejecutamos la siguiente instruccion
+
+            // Redireccionamos al proyecto recien creado
             window.location.href = 'login.php?cerrar_sesion=true';
         
     });
      
 }
 
-function obtenerValorURL(name) { // Obtenemos el valores de la URL. En este caso obtenemos el valor del ID del proyecto
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-    results = regex.exec(location.search);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
 
 
