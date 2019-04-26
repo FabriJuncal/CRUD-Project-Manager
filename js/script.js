@@ -231,7 +231,7 @@ function eliminarProyectoBD(id_proyecto){ // Mediante AJAX Eliminamos el Proyect
 function cambiarNombreProyecto(e){ // Modificamos el Nombre del Proyecto del HTML
 
         e.preventDefault(); // Quitamos el evento predeterminado
-
+        
         // Declaramos a una variable, el nombre Actual del Proyecto
         nombreActualProyecto = document.querySelector(`a[href*="index.php?id_proyecto=${id_proyecto}"] .nombre-proyecto`).innerText;
 
@@ -244,6 +244,25 @@ function cambiarNombreProyecto(e){ // Modificamos el Nombre del Proyecto del HTM
         
         // Al hace CLICK en el Boton de Modificar Nombre Proyecto, Enfocamos al Input que aparece
         document.querySelector('#nombreProyecto').focus();
+
+        // Se declara a una variable el total de caracteres que contiene el Nombre del Proyecto Actual
+        var CantCaracter = document.querySelector('#nombreProyecto').value.length;
+
+        // Un vez que realizamos el FOCUS, Posisionamos el Cursor al Final de la Cadena de Texto
+        document.querySelector('#nombreProyecto').setSelectionRange(CantCaracter,CantCaracter);
+         
+        // Detectamos los nodos en donde se hace CLICK
+        document.onclick = function(e) {
+
+            // Si realizamos Click en algun Nodo que no sea el Input o el Boton, el nombre queda como estaba
+            if(e.target != document.querySelector('#nombreProyecto') && e.target != document.querySelector('#btn-modificar-proyecto')){
+  
+                // Si el valor del campo esta vacio, el nombre del proyecto queda como estaba
+                inputNombreProyecto.innerHTML = `${nombreActualProyecto}`;
+                
+            }
+           
+        }
 
         // Al presionar una tecla se ejecuta la siguiente funcion
         inputNombreProyecto.addEventListener('keypress', function(e){
@@ -722,4 +741,5 @@ function obtenerValorURL(name) { // Obtenemos el valores de la URL. En este caso
     results = regex.exec(location.search);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
+
 
