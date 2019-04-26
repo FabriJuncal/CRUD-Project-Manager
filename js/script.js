@@ -57,14 +57,33 @@ function nuevoProyecto(e){ // Creamos el evento para crear un Nuevo Proyecto y l
     // Seleccionamos el ID con el nuevoProyecto
     var inputNuevoProyecto = document.querySelector('#nuevo-proyecto');
     
+    inputNuevoProyecto.focus();
+
     // Al presionar la tecla ENTER se crea un Nuevo Proyecto
     inputNuevoProyecto.addEventListener('keypress', function(e){
         
-       
+        // Se le asigna a una variable el valor ascii de la tecla presionada
         var tecla = e.which || e.keycode;
-        if(tecla === 13){
-            guardarProyectoBD(inputNuevoProyecto.value);
-            listaProyectos.removeChild(nuevoProyecto);
+
+        if(tecla === 13){ // En el caso que se presione la tecla Enter
+
+            if(inputNuevoProyecto.value != ''){ // En el caso que el valor del input no este vacio
+
+                guardarProyectoBD(inputNuevoProyecto.value);
+                listaProyectos.removeChild(nuevoProyecto);
+
+            }else{ // En el caso que el valor del input este vacio
+                // Plugin.js - Alerta con animacion - SweetAlert2
+                Swal.fire({
+                    title: '¡ERROR!',
+                    text: 'El nombre del Proyecto no puede ir vacio',
+                    type: 'error'
+                })
+
+                // Hacemos referencia al Nodo padre del INPUT lo Eliminamos del DOM
+                inputNuevoProyecto.parentElement.remove();
+            }
+            
             
         }
         
@@ -223,15 +242,18 @@ function cambiarNombreProyecto(e){ // Modificamos el Nombre del Proyecto del HTM
         inputNombreProyecto = document.querySelector('.nombreProyecto');
         inputNombreProyecto.innerHTML = `<input type="text" id="nombreProyecto" value="${nombreProyeto}">`;
         
-            // Al presionar una tecla se ejecuta la siguiente funcion
-            inputNombreProyecto.addEventListener('keypress', function(e){
-        
+        // Al hace CLICK en el Boton de Modificar Nombre Proyecto, Enfocamos al Input que aparece
+        document.querySelector('#nombreProyecto').focus();
+
+        // Al presionar una tecla se ejecuta la siguiente funcion
+        inputNombreProyecto.addEventListener('keypress', function(e){
+            
+
             // Le asignamos a la variable "tecla" el valor asci de la tecla presionada
             var tecla = e.which || e.keycode;
-            
+            // console.log(tecla); 
             if(tecla === 13){ // Si "tecla" es igual al valor 13, quiere decir que presionamos la tecla ENTER, ya que el codigo ascii de ENTER es 13
                 
-
                 // Verificamos que exista el Nodo Mensionado
                 if(document.querySelector('input#nombreProyecto')){
                     // Verificamos que el valor del Nodo sea Diferente de vacio
@@ -254,8 +276,8 @@ function cambiarNombreProyecto(e){ // Modificamos el Nombre del Proyecto del HTM
                             type: 'success',
                             title: 'Se cambio el nombre del proyecto',
                             showConfirmButton: false,
-                            timer: 1500
-                          })
+                            timer: 1700
+                            })
 
                     }else{
                         // Si el valor del campo esta vacio, el nombre del proyecto queda como estaba
@@ -263,16 +285,9 @@ function cambiarNombreProyecto(e){ // Modificamos el Nombre del Proyecto del HTM
 
                     }
                 }
-            }else if(tecla === 27){
+            }
 
-                // FALTA CANCELAR EL CAMBIO DE NOMBRE DEL PROYECTO
-
-                // console.log('Se presiono ESCAPE');
-                // // Si el valor del campo esta vacio, el nombre del proyecto queda como estaba
-                // inputNombreProyecto.innerHTML = `${nombreActualProyecto}`;
-                // console.log(nombreActualProyecto);
-            }      
-        })
+    })
 }
 
 function modificarNombreProyectoBD(nuevoNombreProyecto){ // Mediante AJAX Modificamos el Nombre del Proyecto de la Base de Datos
